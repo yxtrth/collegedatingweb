@@ -1,0 +1,11 @@
+{
+  "name": "clgdtap",
+  "version": "1.0.0",
+  "description": "College dating app frontend",
+  "main": "index.html",
+  "scripts": {
+    "start": "echo 'Starting frontend server...' && exit 0"
+  },
+  "author": "",
+  "license": "ISC"
+}
