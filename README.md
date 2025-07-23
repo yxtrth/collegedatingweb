@@ -29,8 +29,8 @@ A complete, production-ready dating platform designed exclusively for college st
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/yourusername/collegedatingeasy.git
-cd collegedatingeasy
+git clone https://github.com/yxtrth/college-dating-web.git
+cd college-dating-web
 ```
 
 2. **Install dependencies:**
@@ -79,7 +79,7 @@ Open `http://localhost:5000` in your browser
 ## Project Structure
 
 ```
-collegedatingeasy/
+college-dating-web/
 ├── index.html                  # Landing page
 ├── dashboard.html              # User dashboard
 ├── campuscrush-dashboard.js    # Dashboard functionality
@@ -183,4 +183,5 @@ If you encounter any issues:
 5. Open an issue on GitHub
 
 ---
-"# collegedatingweb" 
+
+**Made with ❤️ for college students seeking meaningful connections** 
