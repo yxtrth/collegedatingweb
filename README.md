@@ -1,4 +1,4 @@
-# collegedatingeasy by yath
+# collegedatingweb by yath
 
 A complete, production-ready dating platform designed exclusively for college students. Connect with people who understand your academic life and campus experience.
 
@@ -29,8 +29,8 @@ A complete, production-ready dating platform designed exclusively for college st
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/yxtrth/college-dating-web.git
-cd college-dating-web
+git clone https://github.com/yxtrth/collegedatingweb.git
+cd collegedatingweb
 ```
 
 2. **Install dependencies:**
@@ -48,7 +48,7 @@ npm install
 Create a `.env` file in the `new` directory:
 ```env
 PORT=5000
-MONGODB_URI=mongodb://localhost:27017/collegedatingeasy
+MONGODB_URI=mongodb://localhost:27017/collegedatingweb
 JWT_SECRET=your-super-secret-jwt-key-here
 NODE_ENV=development
 ```
@@ -79,7 +79,7 @@ Open `http://localhost:5000` in your browser
 ## Project Structure
 
 ```
-college-dating-web/
+collegedatingweb/
 ├── index.html                  # Landing page
 ├── dashboard.html              # User dashboard
 ├── campuscrush-dashboard.js    # Dashboard functionality
