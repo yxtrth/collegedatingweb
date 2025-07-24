@@ -33,6 +33,16 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'OK',
+        message: 'collegedatingbyyt server is running',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    });
+});
+
 // Verification page route
 app.get('/verify-email', (req, res) => {
     res.sendFile(path.join(__dirname, 'verify-email.html'));
@@ -120,6 +130,8 @@ app.listen(PORT, () => {
     console.log(`📱 Frontend URL: http://localhost:${PORT}`);
     console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);
     console.log(`✅ Deployment timestamp: ${new Date().toISOString()}`);
+    console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`💾 MongoDB URI: ${MONGODB_URI.includes('localhost') ? 'Local DB' : 'Cloud DB'}`);
 });
 
 module.exports = app;
