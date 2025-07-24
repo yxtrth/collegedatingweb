@@ -2,13 +2,14 @@
 
 class CampusCrushDashboard {
     constructor() {
-        this.baseURL = 'http://localhost:5000/api';
-        this.token = localStorage.getItem('campuscrush_token');
+        this.baseURL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000/api' 
+            : `${window.location.origin}/api`;
+        this.token = localStorage.getItem('collegedatingbyyt_token');
         this.currentUser = null;
         this.interests = [];
         this.additionalPhotos = [];
         this.profileCompletion = 20;
-        this.hasShownIncompleteWarning = false;
         
         this.init();
     }
@@ -71,7 +72,7 @@ class CampusCrushDashboard {
     }
 
     logout() {
-        localStorage.removeItem('campuscrush_token');
+        localStorage.removeItem('collegedatingbyyt_token');
         window.location.href = 'index.html';
     }
 
@@ -538,352 +539,24 @@ class CampusCrushDashboard {
         }
     }
 
-    // Content Loading Methods
+    // Content Loading Methods (placeholders for future implementation)
     async loadDiscoverUsers() {
-        console.log('🔍 Loading discover users...');
         const container = document.getElementById('discoverContainer');
-        if (!container) {
-            console.error('❌ discoverContainer not found');
-            return;
-        }
-
-        try {
-            // Show loading state
-            container.innerHTML = '<div class="loading">Loading potential matches...</div>';
-            console.log('📡 Making API call to /match/discover...');
-
-            // Check if profile is incomplete and show encouragement banner
-            const profileIncomplete = false; // Temporarily disable profile completion check
-            console.log('📊 Profile completion:', this.profileCompletion, '% - Incomplete:', profileIncomplete);
-            
-            // Fetch potential matches
-            const response = await this.apiCall('/match/discover');
-            console.log('✅ API response received:', response);
-            const users = response.users || response; // Handle both response formats
-            console.log('👥 Users for discovery:', users.length);
-            
-            if (users.length === 0) {
-                container.innerHTML = `
-                    <div class="profile-section">
-                        <div class="empty-state">
-                            <i class="fas fa-search" style="font-size: 3rem; color: var(--text-light); margin-bottom: 1rem;"></i>
-                            <h3>No more people to discover right now</h3>
-                            <p>You've seen everyone available! Check back later for new users, or complete your profile to get better matches.</p>
-                            ${profileIncomplete ? `
-                                <button class="btn btn-primary" onclick="app.showSection('profile')">
-                                    <i class="fas fa-user-edit"></i> Complete Your Profile
-                                </button>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
-            // Show profile completion banner if incomplete
-            const profileBanner = profileIncomplete ? `
-                <div class="profile-incomplete-banner">
-                    <div class="banner-content">
-                        <i class="fas fa-info-circle"></i>
-                        <div class="banner-text">
-                            <h4>Complete your profile for better matches!</h4>
-                            <p>Profile completion: ${this.profileCompletion}% - Add photos and interests to attract more people</p>
-                        </div>
-                        <button class="btn btn-outline" onclick="app.showSection('profile')">Complete Profile</button>
-                    </div>
-                </div>
-            ` : '';
-
-            // Create discovery interface
-            container.innerHTML = `
-                ${profileBanner}
-                <div class="discovery-interface">
-                    <div class="discover-card-container">
-                        <div class="discover-card" id="currentCard">
-                            <!-- User card will be loaded here -->
-                        </div>
-                    </div>
-                    <div class="discover-actions">
-                        <button class="action-btn dislike-btn" onclick="app.handleSwipe('dislike')" title="Pass">
-                            <i class="fas fa-times"></i>
-                        </button>
-                        <button class="action-btn super-like-btn" onclick="app.handleSwipe('superlike')" title="Super Like">
-                            <i class="fas fa-star"></i>
-                        </button>
-                        <button class="action-btn like-btn" onclick="app.handleSwipe('like')" title="Like">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                    </div>
-                    <div class="discover-info">
-                        <p><span id="currentIndex">1</span> of <span id="totalCount">${users.length}</span> people</p>
-                        ${profileIncomplete ? '<p class="tip">💡 Tip: Complete your profile to see more compatible matches!</p>' : ''}
-                    </div>
-                </div>
-            `;
-
-            // Store users and show first one
-            this.discoveryUsers = users;
-            this.currentDiscoveryIndex = 0;
-            this.showDiscoveryCard();
-
-        } catch (error) {
-            console.error('❌ Error loading discovery users:', error);
-            console.error('Token:', this.token ? 'Present' : 'Missing');
-            console.error('Base URL:', this.baseURL);
-            
+        if (container) {
             container.innerHTML = `
                 <div class="profile-section">
-                    <div class="error-state">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--error); margin-bottom: 1rem;"></i>
-                        <h3>Unable to load matches</h3>
-                        <p>Error: ${error.message || 'Unknown error occurred'}</p>
-                        <p>Please check the browser console for more details.</p>
-                        <div class="error-actions">
-                            <button class="btn btn-primary" onclick="app.loadDiscoverUsers()">Try Again</button>
-                            <button class="btn btn-outline" onclick="app.showSection('profile')">Complete Profile</button>
-                        </div>
-                    </div>
+                    <p>Discover feature coming soon! Complete your profile to start finding matches.</p>
                 </div>
             `;
         }
-    }
-
-    showDiscoveryCard() {
-        if (!this.discoveryUsers || this.currentDiscoveryIndex >= this.discoveryUsers.length) {
-            this.loadDiscoverUsers(); // Reload when no more users
-            return;
-        }
-
-        const user = this.discoveryUsers[this.currentDiscoveryIndex];
-        const cardContainer = document.getElementById('currentCard');
-        
-        if (!cardContainer) return;
-
-        // Calculate age from birth date or use profile age
-        const age = user.profile?.age || user.age || 'N/A';
-        const interests = user.profile?.interests || [];
-        
-        cardContainer.innerHTML = `
-            <div class="discovery-card-inner">
-                <div class="discovery-photo">
-                    ${user.profile?.profilePhoto 
-                        ? `<img src="/api/profile/photo/${user.profile.profilePhoto}" alt="${user.name}">`
-                        : `<div class="photo-placeholder">
-                               <i class="fas fa-user"></i>
-                               <p>No Photo</p>
-                           </div>`
-                    }
-                </div>
-                <div class="discovery-info-overlay">
-                    <div class="discovery-main-info">
-                        <h2>${user.name}, ${age}</h2>
-                        <p class="discovery-college">
-                            <i class="fas fa-graduation-cap"></i>
-                            ${user.profile?.major || 'Student'} • ${user.profile?.year || 'N/A'}
-                        </p>
-                    </div>
-                    ${user.profile?.bio ? `<p class="discovery-bio">"${user.profile.bio}"</p>` : ''}
-                    ${interests.length > 0 ? `
-                        <div class="discovery-interests">
-                            ${interests.slice(0, 3).map(interest => 
-                                `<span class="interest-tag">${interest}</span>`
-                            ).join('')}
-                            ${interests.length > 3 ? `<span class="interest-more">+${interests.length - 3} more</span>` : ''}
-                        </div>
-                    ` : ''}
-                </div>
-            </div>
-        `;
-
-        // Update counter
-        const currentIndexEl = document.getElementById('currentIndex');
-        if (currentIndexEl) {
-            currentIndexEl.textContent = this.currentDiscoveryIndex + 1;
-        }
-    }
-
-    async handleSwipe(action) {
-        if (!this.discoveryUsers || this.currentDiscoveryIndex >= this.discoveryUsers.length) {
-            return;
-        }
-
-        const currentUser = this.discoveryUsers[this.currentDiscoveryIndex];
-        
-        // Show gentle reminder for incomplete profiles on first swipe
-        if (this.profileCompletion < 50 && !this.hasShownIncompleteWarning) {
-            this.hasShownIncompleteWarning = true;
-            this.showProfileIncompleteReminder();
-        }
-        
-        try {
-            if (action === 'like' || action === 'superlike') {
-                const response = await this.apiCall(`/match/like/${currentUser._id}`, {
-                    method: 'POST'
-                });
-                
-                // Show match notification if it's a match
-                if (response.isMatch) {
-                    this.showMatchNotification(currentUser);
-                } else {
-                    this.showLikeNotification();
-                }
-            } else if (action === 'dislike') {
-                await this.apiCall(`/match/dislike/${currentUser._id}`, {
-                    method: 'POST'
-                });
-            }
-
-            // Move to next user
-            this.currentDiscoveryIndex++;
-            
-            // Add swipe animation
-            const card = document.getElementById('currentCard');
-            if (card) {
-                card.style.transform = action === 'like' || action === 'superlike' ? 'translateX(100%)' : 'translateX(-100%)';
-                card.style.opacity = '0';
-                
-                setTimeout(() => {
-                    this.showDiscoveryCard();
-                    card.style.transform = 'translateX(0)';
-                    card.style.opacity = '1';
-                }, 300);
-            } else {
-                this.showDiscoveryCard();
-            }
-
-        } catch (error) {
-            console.error('Error handling swipe:', error);
-            this.showMessage('Error processing your action. Please try again.', 'error');
-        }
-    }
-
-    showProfileIncompleteReminder() {
-        const reminder = document.createElement('div');
-        reminder.className = 'profile-reminder-popup';
-        reminder.innerHTML = `
-            <div class="reminder-content">
-                <h3>🎉 Great start!</h3>
-                <p>You can browse and like people now, but completing your profile will help you get more matches!</p>
-                <div class="reminder-actions">
-                    <button class="btn btn-primary" onclick="app.showSection('profile'); this.parentElement.parentElement.parentElement.remove();">
-                        Complete Profile Now
-                    </button>
-                    <button class="btn btn-outline" onclick="this.parentElement.parentElement.parentElement.remove();">
-                        Keep Browsing
-                    </button>
-                </div>
-            </div>
-        `;
-        
-        document.body.appendChild(reminder);
-        
-        // Auto remove after 8 seconds
-        setTimeout(() => {
-            if (reminder.parentElement) {
-                reminder.remove();
-            }
-        }, 8000);
-    }
-
-    showMatchNotification(user) {
-        const notification = document.createElement('div');
-        notification.className = 'match-notification';
-        notification.innerHTML = `
-            <div class="match-content">
-                <h2>🎉 It's a Match! 🎉</h2>
-                <p>You and ${user.name} liked each other!</p>
-                <div class="match-actions">
-                    <button class="btn btn-primary" onclick="app.showSection('messages')">Send Message</button>
-                    <button class="btn btn-outline" onclick="this.parentElement.parentElement.parentElement.remove()">Keep Swiping</button>
-                </div>
-            </div>
-        `;
-        
-        document.body.appendChild(notification);
-        
-        // Auto remove after 5 seconds
-        setTimeout(() => {
-            if (notification.parentElement) {
-                notification.remove();
-            }
-        }, 5000);
-    }
-
-    showLikeNotification() {
-        const notification = document.createElement('div');
-        notification.className = 'like-notification';
-        notification.innerHTML = '<p>👍 Liked! Maybe they\'ll like you back!</p>';
-        
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            if (notification.parentElement) {
-                notification.remove();
-            }
-        }, 2000);
     }
 
     async loadMatches() {
         const container = document.getElementById('matchesContainer');
-        if (!container) return;
-
-        try {
-            container.innerHTML = '<div class="loading">Loading your matches...</div>';
-            
-            const matches = await this.apiCall('/match/me/matches');
-            
-            if (matches.length === 0) {
-                container.innerHTML = `
-                    <div class="profile-section">
-                        <div class="empty-state">
-                            <i class="fas fa-fire" style="font-size: 3rem; color: var(--text-light); margin-bottom: 1rem;"></i>
-                            <h3>No matches yet</h3>
-                            <p>Start swiping in the Discover section to find your perfect match!</p>
-                            <button class="btn btn-primary" onclick="app.showSection('discover')">Start Discovering</button>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
-            // Display matches
-            const matchesHTML = matches.map(match => `
-                <div class="match-card">
-                    <div class="match-photo">
-                        ${match.user.profile?.profilePhoto 
-                            ? `<img src="/api/profile/photo/${match.user.profile.profilePhoto}" alt="${match.user.name}">`
-                            : `<div class="photo-placeholder">
-                                   <i class="fas fa-user"></i>
-                               </div>`
-                        }
-                    </div>
-                    <div class="match-info">
-                        <h4>${match.user.name}</h4>
-                        <p>${match.user.profile?.major || 'Student'}</p>
-                        <small>Matched ${new Date(match.createdAt).toLocaleDateString()}</small>
-                    </div>
-                    <button class="btn btn-primary" onclick="app.startConversation('${match.user._id}')">
-                        Message
-                    </button>
-                </div>
-            `).join('');
-
-            container.innerHTML = `
-                <div class="matches-grid">
-                    ${matchesHTML}
-                </div>
-            `;
-
-        } catch (error) {
-            console.error('Error loading matches:', error);
+        if (container) {
             container.innerHTML = `
                 <div class="profile-section">
-                    <div class="error-state">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--error); margin-bottom: 1rem;"></i>
-                        <h3>Unable to load matches</h3>
-                        <p>Please try again later.</p>
-                        <button class="btn btn-primary" onclick="app.loadMatches()">Try Again</button>
-                    </div>
+                    <p>You don't have any matches yet. Complete your profile and start discovering people!</p>
                 </div>
             `;
         }
