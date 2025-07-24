@@ -119,6 +119,7 @@ app.listen(PORT, () => {
     console.log(`🚀 collegedatingbyyt Server running on port ${PORT}`);
     console.log(`📱 Frontend URL: http://localhost:${PORT}`);
     console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);
+    console.log(`✅ Deployment timestamp: ${new Date().toISOString()}`);
 });
 
 module.exports = app;
