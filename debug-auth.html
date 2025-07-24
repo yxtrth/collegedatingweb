@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .debug-box { 
+            background: #f5f5f5; 
+            border: 1px solid #ccc; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+        }
+        .error { background: #ffe6e6; border-color: #ffcccc; }
+        .success { background: #e6ffe6; border-color: #ccffcc; }
+        button { 
+            background: #007cba; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin: 5px; 
+        }
+        button:hover { background: #005a87; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Debug Test Page</h1>
+    
+    <div class="debug-box">
+        <h3>🔍 Current Status</h3>
+        <p><strong>Current URL:</strong> <span id="currentUrl"></span></p>
+        <p><strong>Token exists:</strong> <span id="tokenStatus"></span></p>
+        <p><strong>Token value:</strong> <span id="tokenValue"></span></p>
+        <p><strong>Base URL:</strong> <span id="baseUrl"></span></p>
+    </div>
+
+    <div class="debug-box">
+        <h3>🧪 Test Actions</h3>
+        <button onclick="testLogin()">Test Login</button>
+        <button onclick="testDashboard()">Test Dashboard Load</button>
+        <button onclick="clearToken()">Clear Token</button>
+        <button onclick="setTestToken()">Set Test Token</button>
+        <button onclick="redirectToDashboard()">Redirect to Dashboard</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        // Update status on page load
+        function updateStatus() {
+            document.getElementById('currentUrl').textContent = window.location.href;
+            
+            const token = localStorage.getItem('collegedatingbyyt_token');
+            document.getElementById('tokenStatus').textContent = token ? '✅ YES' : '❌ NO';
+            document.getElementById('tokenValue').textContent = token ? token.substring(0, 20) + '...' : 'None';
+            
+            const baseUrl = window.location.hostname === 'localhost' 
+                ? 'http://localhost:5000/api' 
+                : window.location.origin + '/api';
+            document.getElementById('baseUrl').textContent = baseUrl;
+        }
+
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `debug-box ${type === 'error' ? 'error' : type === 'success' ? 'success' : ''}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            results.appendChild(div);
+            console.log(message);
+        }
+
+        async function testLogin() {
+            log('🔐 Testing login with test credentials...');
+            
+            try {
+                const baseUrl = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:5000' 
+                    : window.location.origin;
+                
+                const response = await fetch(`${baseUrl}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'test@example.com',
+                        password: 'test123'
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('collegedatingbyyt_token', data.token);
+                    log('✅ Login successful! Token stored.', 'success');
+                    updateStatus();
+                } else {
+                    const error = await response.text();
+                    log(`❌ Login failed: ${error}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Login error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testDashboard() {
+            log('📊 Testing dashboard authentication...');
+            
+            const token = localStorage.getItem('collegedatingbyyt_token');
+            if (!token) {
+                log('❌ No token found for dashboard test', 'error');
+                return;
+            }
+
+            try {
+                const baseUrl = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:5000' 
+                    : window.location.origin;
+                
+                const response = await fetch(`${baseUrl}/api/auth/me`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const user = await response.json();
+                    log(`✅ Dashboard auth successful! User: ${user.name}`, 'success');
+                } else {
+                    const error = await response.text();
+                    log(`❌ Dashboard auth failed: ${error}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Dashboard test error: ${error.message}`, 'error');
+            }
+        }
+
+        function clearToken() {
+            localStorage.removeItem('collegedatingbyyt_token');
+            log('🗑️ Token cleared');
+            updateStatus();
+        }
+
+        function setTestToken() {
+            // Set a dummy token for testing
+            localStorage.setItem('collegedatingbyyt_token', 'test-token-12345');
+            log('🔧 Test token set');
+            updateStatus();
+        }
+
+        function redirectToDashboard() {
+            log('🔄 Redirecting to dashboard...');
+            window.location.href = './dashboard.html';
+        }
+
+        // Initialize on page load
+        updateStatus();
+        log('🚀 Debug page loaded');
+    </script>
+</body>
+</html>

@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CampusCrush</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #4ecdc4;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --accent: #ffe66d;
+            --text: #333333;
+            --text-light: #666666;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.05), rgba(78, 205, 196, 0.05));
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: none;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--gradient);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            width: 20px;
+        }
+
+        /* Content Area */
+        .content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            min-height: 600px;
+        }
+
+        .content-header {
+            margin-bottom: 2rem;
+        }
+
+        .content-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .content-subtitle {
+            color: var(--text-light);
+        }
+
+        /* Profile Setup */
+        .profile-setup {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .profile-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .profile-section:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Photo Upload */
+        .photo-upload-container {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .profile-photo-preview {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid #e1e5e9;
+            transition: all 0.3s ease;
+        }
+
+        .profile-photo-preview:hover {
+            border-color: var(--primary);
+        }
+
+        .profile-photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Additional Photos */
+        .additional-photos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .photo-slot {
+            width: 150px;
+            height: 150px;
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-slot:hover {
+            border-color: var(--primary);
+            background: rgba(255, 107, 107, 0.05);
+        }
+
+        .photo-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-slot .remove-photo {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: var(--error);
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        /* Interests Tags */
+        .interests-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .interest-tag {
+            background: var(--gradient);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .interest-tag .remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .add-interest {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .interest-input {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 25px;
+            font-size: 0.9rem;
+        }
+
+        .add-interest-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Progress Indicator */
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e1e5e9;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Success/Error Messages */
+        .message {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .message.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 0 1rem;
+            }
+
+            .sidebar {
+                position: static;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 0.5rem;
+                padding: 1rem;
+            }
+
+            .nav-item {
+                flex-direction: column;
+                text-align: center;
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .photo-upload-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Additional utility classes for inline style fixes */
+        .logo-highlight {
+            color: var(--primary);
+        }
+
+        .camera-placeholder-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-hint {
+            margin-top: 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .upload-btn-spaced {
+            margin-top: 1rem;
+        }
+
+        .age-range-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .age-input {
+            width: 80px;
+        }
+
+        .distance-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .progress-initial {
+            width: 20%;
+        }
+
+        /* Discovery Interface Styles */
+        .discovery-interface {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* Profile Incomplete Banner */
+        .profile-incomplete-banner {
+            background: linear-gradient(135deg, rgba(255, 230, 109, 0.1), rgba(255, 107, 107, 0.1));
+            border: 1px solid var(--accent);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .banner-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-align: left;
+        }
+
+        .banner-content i {
+            color: var(--accent);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .banner-text {
+            flex: 1;
+        }
+
+        .banner-text h4 {
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-size: 1.1rem;
+        }
+
+        .banner-text p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .banner-content .btn {
+            flex-shrink: 0;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+        }
+
+        .discover-card-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .discover-info .tip {
+            color: var(--accent);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Mobile responsiveness for banner */
+        @media (max-width: 768px) {
+            .banner-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .banner-text {
+                text-align: center;
+            }
+
+            .error-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .error-actions .btn {
+                width: 200px;
+            }
+        }
+
+        .discover-card-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .discover-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            max-width: 100%;
+            height: 600px;
+            position: relative;
+        }
+
+        .discovery-card-inner {
+            height: 100%;
+            position: relative;
+        }
+
+        .discovery-photo {
+            width: 100%;
+            height: 70%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .discovery-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .photo-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .discovery-info-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+            padding: 2rem;
+            text-align: left;
+        }
+
+        .discovery-main-info h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .discovery-college {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .discovery-bio {
+            font-style: italic;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .discovery-interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .discovery-interests .interest-tag {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+
+        .interest-more {
+            color: var(--accent);
+            font-size: 0.8rem;
+        }
+
+        .discover-actions {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .action-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .dislike-btn {
+            background: #ff4458;
+            color: white;
+        }
+
+        .dislike-btn:hover {
+            background: #e63946;
+            transform: scale(1.1);
+        }
+
+        .like-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .like-btn:hover {
+            background: #ff5252;
+            transform: scale(1.1);
+        }
+
+        .super-like-btn {
+            background: var(--accent);
+            color: var(--dark);
+        }
+
+        .super-like-btn:hover {
+            background: #ffd93d;
+            transform: scale(1.1);
+        }
+
+        .discover-info {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Loading and Error States */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+
+        .empty-state, .error-state {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .empty-state h3, .error-state h3 {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .empty-state p, .error-state p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        /* Match Notification */
+        .match-notification {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .match-content {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .match-content h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .match-content p {
+            margin-bottom: 2rem;
+            color: var(--text);
+        }
+
+        .match-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Like Notification */
+        .like-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        /* Profile Reminder Popup */
+        .profile-reminder-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .reminder-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .reminder-content h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .reminder-content p {
+            margin-bottom: 2rem;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .reminder-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .reminder-actions .btn {
+            min-width: 140px;
+        }
+
+        @media (max-width: 576px) {
+            .reminder-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .reminder-actions .btn {
+                width: 100%;
+            }
+        }
+
+        /* Matches Grid */
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .match-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .match-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .match-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            overflow: hidden;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .match-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .match-photo .photo-placeholder {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .match-info h4 {
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .match-info p {
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .match-info small {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">Campus<span class="logo-highlight">Crush</span></div>
+            <div class="user-menu">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span id="userName">Loading...</span>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="nav-item active" onclick="showSection('profile')">
+                <i class="fas fa-user"></i>
+                <span>Profile Setup</span>
+            </div>
+            <div class="nav-item" onclick="showSection('photos')">
+                <i class="fas fa-camera"></i>
+                <span>Photos</span>
+            </div>
+            <div class="nav-item" onclick="showSection('preferences')">
+                <i class="fas fa-heart"></i>
+                <span>Preferences</span>
+            </div>
+            <div class="nav-item" onclick="showSection('discover')">
+                <i class="fas fa-search"></i>
+                <span>Discover</span>
+            </div>
+            <div class="nav-item" onclick="showSection('matches')">
+                <i class="fas fa-fire"></i>
+                <span>Matches</span>
+            </div>
+            <div class="nav-item" onclick="showSection('messages')">
+                <i class="fas fa-comments"></i>
+                <span>Messages</span>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content">
+            <!-- Profile Setup Section -->
+            <div id="profile-section" class="content-section">
+                <div class="content-header">
+                    <h1 class="content-title">Complete Your Profile</h1>
+                    <p class="content-subtitle">Let's set up your profile to help you find the perfect match!</p>
+                </div>
+
+                <!-- Progress Indicator -->
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-initial" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text">Profile completion: <span id="progressText">20%</span></div>
+                </div>
+
+                <div class="profile-setup">
+                    <!-- Basic Information -->
+                    <div class="profile-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <h3 class="section-title">Basic Information</h3>
+                                <p class="section-description">Tell us about yourself</p>
+                            </div>
+                        </div>
+
+                        <form id="basicInfoForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Bio</label>
+                                    <textarea class="form-textarea" name="bio" placeholder="Tell others about yourself, your hobbies, what you're studying..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Major</label>
+                                    <input type="text" class="form-input" name="major" placeholder="Computer Science, Psychology, etc.">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Academic Year</label>
+                                    <select class="form-select" name="year" title="Select your academic year">
+                                        <option value="">Select Year</option>
+                                        <option value="Freshman">Freshman</option>
+                                        <option value="Sophomore">Sophomore</option>
+                                        <option value="Junior">Junior</option>
+                                        <option value="Senior">Senior</option>
+                                        <option value="Graduate">Graduate</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Looking For</label>
+                                    <select class="form-select" name="lookingFor" title="Select what you are looking for">
+                                        <option value="">What are you looking for?</option>
+                                        <option value="Friends">Friends</option>
+                                        <option value="Dating">Dating</option>
+                                        <option value="Serious Relationship">Serious Relationship</option>
+                                        <option value="Study Partner">Study Partner</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Basic Info
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Interests -->
+                    <div class="profile-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div>
+                                <h3 class="section-title">Interests & Hobbies</h3>
+                                <p class="section-description">What do you enjoy doing?</p>
+                            </div>
+                        </div>
+
+                        <div class="interests-container" id="interestsContainer">
+                            <!-- Interests will be added here dynamically -->
+                        </div>
+
+                        <div class="add-interest">
+                            <input type="text" class="interest-input" id="interestInput" placeholder="Add an interest (e.g., Photography, Gaming, Hiking)">
+                            <button type="button" class="add-interest-btn" onclick="addInterest()">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Photos Section -->
+            <div id="photos-section" class="content-section hidden">
+                <div class="content-header">
+                    <h1 class="content-title">Add Your Photos</h1>
+                    <p class="content-subtitle">Show your personality with great photos!</p>
+                </div>
+
+                <div class="profile-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <div>
+                            <h3 class="section-title">Profile Picture</h3>
+                            <p class="section-description">This will be your main photo</p>
+                        </div>
+                    </div>
+
+                    <div class="photo-upload-container">
+                        <div class="profile-photo-preview" id="profilePhotoPreview">
+                            <div class="photo-placeholder">
+                                <i class="fas fa-camera camera-placeholder-icon"></i>
+                                <p>Click to upload</p>
+                            </div>
+                        </div>
+                        <div>
+                            <input type="file" class="file-input" id="profilePhotoInput" accept="image/*" onchange="previewProfilePhoto(this)">
+                            <button type="button" class="upload-btn" onclick="document.getElementById('profilePhotoInput').click()">
+                                <i class="fas fa-upload"></i> Upload Profile Picture
+                            </button>
+                            <p class="upload-hint">
+                                Recommended: Square image, at least 400x400px, under 5MB
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <div>
+                            <h3 class="section-title">Additional Photos</h3>
+                            <p class="section-description">Add up to 5 more photos to showcase your personality</p>
+                        </div>
+                    </div>
+
+                    <div class="additional-photos" id="additionalPhotos">
+                        <!-- Photo slots will be generated here -->
+                    </div>
+                    <input type="file" class="file-input" id="additionalPhotoInput" accept="image/*" multiple onchange="addAdditionalPhotos(this)">
+                    <button type="button" class="upload-btn upload-btn-spaced" onclick="document.getElementById('additionalPhotoInput').click()">
+                        <i class="fas fa-plus"></i> Add More Photos
+                    </button>
+                </div>
+            </div>
+
+            <!-- Preferences Section -->
+            <div id="preferences-section" class="content-section hidden">
+                <div class="content-header">
+                    <h1 class="content-title">Dating Preferences</h1>
+                    <p class="content-subtitle">Help us find your perfect match</p>
+                </div>
+
+                <div class="profile-section">
+                    <form id="preferencesForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Age Range</label>
+                                <div class="age-range-container">
+                                    <input type="number" class="form-input age-input" name="ageMin" placeholder="Min" min="18" max="30">
+                                    <span>to</span>
+                                    <input type="number" class="form-input age-input" name="ageMax" placeholder="Max" min="18" max="30">
+                                    <span>years old</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Maximum Distance</label>
+                                <div class="distance-container">
+                                    <input type="range" name="distance" min="1" max="100" value="25" oninput="updateDistanceValue(this.value)">
+                                    <span id="distanceValue">25 miles</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Interested In</label>
+                                <select class="form-select" name="interestedIn" title="Select your relationship preference">
+                                    <option value="">Select preference</option>
+                                    <option value="Friends">Just Friends</option>
+                                    <option value="Dating">Casual Dating</option>
+                                    <option value="Serious">Serious Relationships</option>
+                                    <option value="Study">Study Partners</option>
+                                    <option value="All">Open to All</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Preferences
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Other sections (Discover, Matches, Messages) will be added here -->
+            <div id="discover-section" class="content-section hidden">
+                <div class="content-header">
+                    <h1 class="content-title">Discover People</h1>
+                    <p class="content-subtitle">Find your perfect match on campus</p>
+                </div>
+                <div id="discoverContainer">
+                    <!-- Discover cards will be loaded here -->
+                </div>
+            </div>
+
+            <div id="matches-section" class="content-section hidden">
+                <div class="content-header">
+                    <h1 class="content-title">Your Matches</h1>
+                    <p class="content-subtitle">People who liked you back</p>
+                </div>
+                <div id="matchesContainer">
+                    <!-- Matches will be loaded here -->
+                </div>
+            </div>
+
+            <div id="messages-section" class="content-section hidden">
+                <div class="content-header">
+                    <h1 class="content-title">Messages</h1>
+                    <p class="content-subtitle">Chat with your matches</p>
+                </div>
+                <div id="messagesContainer">
+                    <!-- Messages will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="campuscrush-dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verified - collegedatingbyyt</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #4ecdc4;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .verification-container {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #10b981;
+            margin-bottom: 1.5rem;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            color: #ef4444;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+        }
+
+        .logo .highlight {
+            color: var(--primary);
+        }
+
+        .loading-spinner {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="verification-container" id="verificationResult">
+        <div class="logo">college<span class="highlight">datingbyyt</span></div>
+        
+        <!-- Loading state -->
+        <div id="loading">
+            <i class="fas fa-spinner fa-spin loading-spinner"></i>
+            <h1>Verifying your email...</h1>
+            <p>Please wait while we verify your account.</p>
+        </div>
+
+        <!-- Success state (hidden initially) -->
+        <div id="success" class="hidden">
+            <i class="fas fa-check-circle success-icon"></i>
+            <h1>Email Verified Successfully! 🎉</h1>
+            <p>Your account has been verified. You can now log in and start connecting with other students on your campus!</p>
+            <a href="./index.html" class="btn">Go to Login</a>
+        </div>
+
+        <!-- Error state (hidden initially) -->
+        <div id="error" class="hidden">
+            <i class="fas fa-times-circle error-icon"></i>
+            <h1>Verification Failed</h1>
+            <p id="errorMessage">The verification link is invalid or has expired. Please request a new verification email.</p>
+            <a href="./index.html" class="btn">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // Get URL parameters
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                token: params.get('token'),
+                status: params.get('status'),
+                message: params.get('message')
+            };
+        }
+
+        // Handle verification result
+        async function handleVerificationResult() {
+            const params = getUrlParams();
+            
+            // If we have a status parameter, use it directly
+            if (params.status === 'success') {
+                showSuccess();
+                return;
+            } else if (params.status === 'error') {
+                showError(params.message || 'Verification failed.');
+                return;
+            }
+            
+            // If we have a token, verify it with the server
+            if (params.token) {
+                await verifyToken(params.token);
+            } else {
+                // No token or status found
+                showError('No verification token found in the URL.');
+            }
+        }
+
+        async function verifyToken(token) {
+            try {
+                const baseUrl = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:5000' 
+                    : 'https://collegedatingwebbyyatharth.onrender.com';
+                
+                const response = await fetch(`${baseUrl}/api/auth/verify/${token}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showSuccess();
+                } else {
+                    const errorData = await response.json();
+                    showError(errorData.message || 'Verification failed. The link may be expired or invalid.');
+                }
+            } catch (error) {
+                console.error('Verification error:', error);
+                showError('Unable to verify email. Please check your internet connection and try again.');
+            }
+        }
+
+        function showSuccess() {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('error').classList.add('hidden');
+            document.getElementById('success').classList.remove('hidden');
+        }
+
+        function showError(message) {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('success').classList.add('hidden');
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('error').classList.remove('hidden');
+        }
+
+        // Start verification when page loads
+        document.addEventListener('DOMContentLoaded', handleVerificationResult);
+    </script>
+</body>
+</html>
