@@ -577,6 +577,458 @@
         .progress-initial {
             width: 20%;
         }
+
+        /* Discovery Interface Styles */
+        .discovery-interface {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* Profile Incomplete Banner */
+        .profile-incomplete-banner {
+            background: linear-gradient(135deg, rgba(255, 230, 109, 0.1), rgba(255, 107, 107, 0.1));
+            border: 1px solid var(--accent);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .banner-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-align: left;
+        }
+
+        .banner-content i {
+            color: var(--accent);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .banner-text {
+            flex: 1;
+        }
+
+        .banner-text h4 {
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-size: 1.1rem;
+        }
+
+        .banner-text p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .banner-content .btn {
+            flex-shrink: 0;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+        }
+
+        .discover-card-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .discover-info .tip {
+            color: var(--accent);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Mobile responsiveness for banner */
+        @media (max-width: 768px) {
+            .banner-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .banner-text {
+                text-align: center;
+            }
+
+            .error-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .error-actions .btn {
+                width: 200px;
+            }
+        }
+
+        .discover-card-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .discover-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            max-width: 100%;
+            height: 600px;
+            position: relative;
+        }
+
+        .discovery-card-inner {
+            height: 100%;
+            position: relative;
+        }
+
+        .discovery-photo {
+            width: 100%;
+            height: 70%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .discovery-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .photo-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .discovery-info-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+            padding: 2rem;
+            text-align: left;
+        }
+
+        .discovery-main-info h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .discovery-college {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .discovery-bio {
+            font-style: italic;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .discovery-interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .discovery-interests .interest-tag {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+
+        .interest-more {
+            color: var(--accent);
+            font-size: 0.8rem;
+        }
+
+        .discover-actions {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .action-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .dislike-btn {
+            background: #ff4458;
+            color: white;
+        }
+
+        .dislike-btn:hover {
+            background: #e63946;
+            transform: scale(1.1);
+        }
+
+        .like-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .like-btn:hover {
+            background: #ff5252;
+            transform: scale(1.1);
+        }
+
+        .super-like-btn {
+            background: var(--accent);
+            color: var(--dark);
+        }
+
+        .super-like-btn:hover {
+            background: #ffd93d;
+            transform: scale(1.1);
+        }
+
+        .discover-info {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Loading and Error States */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+
+        .empty-state, .error-state {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .empty-state h3, .error-state h3 {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .empty-state p, .error-state p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        /* Match Notification */
+        .match-notification {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .match-content {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .match-content h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .match-content p {
+            margin-bottom: 2rem;
+            color: var(--text);
+        }
+
+        .match-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Like Notification */
+        .like-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        /* Profile Reminder Popup */
+        .profile-reminder-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .reminder-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .reminder-content h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .reminder-content p {
+            margin-bottom: 2rem;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .reminder-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .reminder-actions .btn {
+            min-width: 140px;
+        }
+
+        @media (max-width: 576px) {
+            .reminder-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .reminder-actions .btn {
+                width: 100%;
+            }
+        }
+
+        /* Matches Grid */
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .match-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .match-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .match-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            overflow: hidden;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .match-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .match-photo .photo-placeholder {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .match-info h4 {
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .match-info p {
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .match-info small {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -855,5 +1307,8 @@
     </div>
 
     <script src="campuscrush-dashboard.js"></script>
+    <script src="discovery-test.js"></script>
+    <script src="debug-discovery.js"></script>
+    <script src="simple-debug.js"></script>
 </body>
 </html>

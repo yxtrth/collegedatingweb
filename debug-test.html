@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discovery Debug Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { border: 1px solid #ddd; padding: 20px; margin: 20px 0; border-radius: 5px; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        .info { background: #d1ecf1; border-color: #bee5eb; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        #userList { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 10px; }
+        .user-card { border: 1px solid #ccc; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Discovery Debug Test Page</h1>
+    
+    <div class="test-section info">
+        <h3>📋 Test Results</h3>
+        <div id="results"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>🔧 Debug Controls</h3>
+        <button onclick="testAuth()">🔐 Test Authentication</button>
+        <button onclick="testDiscovery()">🔍 Test Discovery API</button>
+        <button onclick="testStats()">📊 Test Database Stats</button>
+        <button onclick="loginTestUser()">👤 Login Test User</button>
+        <button onclick="clearResults()">🗑️ Clear Results</button>
+    </div>
+    
+    <div class="test-section">
+        <h3>👥 Discovery Results</h3>
+        <div id="userList"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+        
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `test-section ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong> - ${message}`;
+            results.appendChild(div);
+            console.log(message);
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('userList').innerHTML = '';
+        }
+        
+        async function loginTestUser() {
+            try {
+                log('🔐 Attempting to login test user...', 'info');
+                
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'test@college.edu',
+                        password: 'password123'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('campuscrush_token', data.token);
+                    log('✅ Login successful! Token saved.', 'success');
+                    log(`Token preview: ${data.token.substring(0, 50)}...`, 'info');
+                } else {
+                    log(`❌ Login failed: ${data.message}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Login error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testAuth() {
+            const token = localStorage.getItem('campuscrush_token');
+            
+            if (!token) {
+                log('❌ No token found in localStorage', 'error');
+                return;
+            }
+            
+            try {
+                log('🔐 Testing authentication...', 'info');
+                
+                const response = await fetch(`${API_BASE}/profile/me`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    log('✅ Authentication successful!', 'success');
+                    log(`User: ${data.name} (${data.email})`, 'info');
+                    log(`Profile Complete: ${data.isProfileComplete}`, 'info');
+                } else {
+                    log(`❌ Auth failed: ${data.message}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Auth error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testStats() {
+            const token = localStorage.getItem('campuscrush_token');
+            
+            if (!token) {
+                log('❌ No token found - login first', 'error');
+                return;
+            }
+            
+            try {
+                log('📊 Testing database stats...', 'info');
+                
+                const response = await fetch(`${API_BASE}/match/debug/stats`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    log('✅ Stats retrieved successfully!', 'success');
+                    log(`<pre>${JSON.stringify(data, null, 2)}</pre>`, 'info');
+                } else {
+                    log(`❌ Stats failed: ${data.message || data.error}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Stats error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testDiscovery() {
+            const token = localStorage.getItem('campuscrush_token');
+            
+            if (!token) {
+                log('❌ No token found - login first', 'error');
+                return;
+            }
+            
+            try {
+                log('🔍 Testing discovery endpoint...', 'info');
+                
+                const response = await fetch(`${API_BASE}/match/discover`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    log('✅ Discovery successful!', 'success');
+                    log(`Found ${data.users ? data.users.length : 0} users`, 'success');
+                    
+                    if (data.debug) {
+                        log(`Debug info: <pre>${JSON.stringify(data.debug, null, 2)}</pre>`, 'info');
+                    }
+                    
+                    if (data.users && data.users.length > 0) {
+                        displayUsers(data.users);
+                        log(`✅ ${data.users.length} users displayed below`, 'success');
+                    } else {
+                        log('⚠️ No users to display', 'error');
+                    }
+                } else {
+                    log(`❌ Discovery failed: ${data.message || data.error}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Discovery error: ${error.message}`, 'error');
+            }
+        }
+        
+        function displayUsers(users) {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+            
+            users.forEach(user => {
+                const userDiv = document.createElement('div');
+                userDiv.className = 'user-card';
+                userDiv.innerHTML = `
+                    <h4>${user.name}</h4>
+                    <p>Age: ${user.profile?.age || 'N/A'}</p>
+                    <p>College: ${user.profile?.college || 'N/A'}</p>
+                    <p>Major: ${user.profile?.major || 'N/A'}</p>
+                    <p>Year: ${user.profile?.year || 'N/A'}</p>
+                    <p>Bio: ${user.profile?.bio ? user.profile.bio.substring(0, 50) + '...' : 'N/A'}</p>
+                `;
+                userList.appendChild(userDiv);
+            });
+        }
+        
+        // Auto-run basic checks on load
+        window.addEventListener('load', () => {
+            log('🚀 Debug test page loaded', 'info');
+            const token = localStorage.getItem('campuscrush_token');
+            if (token) {
+                log('🔑 Token found in localStorage', 'success');
+                log('Click "Test Authentication" to verify token validity', 'info');
+            } else {
+                log('⚠️ No token found - click "Login Test User" first', 'error');
+            }
+        });
+    </script>
+</body>
+</html>
