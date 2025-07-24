@@ -992,8 +992,8 @@
                         <input type="text" id="name" name="name" required>
                     </div>
                     <div class="form-group">
-                        <label for="email">College Email (.edu)</label>
-                        <input type="email" id="email" name="email" pattern=".*\\.edu$" required>
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="Enter any valid email address" required>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
@@ -1046,6 +1046,78 @@
                     </div>
                 </form>
             `;
+        }
+
+        // Email Verification Functions
+        function showEmailVerificationMessage(email, previewUrl) {
+            const message = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 10000;">
+                    <div style="background: white; border-radius: 20px; padding: 40px; max-width: 500px; width: 90%; text-align: center;">
+                        <div style="font-size: 4rem; color: #4CAF50; margin-bottom: 20px;">
+                            <i class="fas fa-envelope-circle-check"></i>
+                        </div>
+                        <h2 style="color: #333; margin-bottom: 15px;">Check Your Email! 📧</h2>
+                        <p style="color: #666; margin-bottom: 20px;">
+                            We've sent a verification email to:<br>
+                            <strong>${email}</strong>
+                        </p>
+                        <p style="color: #666; margin-bottom: 20px;">
+                            Click the verification link in your email to activate your account and start connecting with other students!
+                        </p>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 20px 0;">
+                            <p style="margin: 0; font-size: 14px; color: #666;">
+                                💡 <strong>Tip:</strong> Check your spam folder if you don't see the email
+                            </p>
+                        </div>
+                        ${previewUrl ? `<a href="${previewUrl}" target="_blank" style="display: inline-block; background: #e3f2fd; color: #1976d2; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-size: 12px; margin: 10px 0;">🔍 Preview Email (Dev)</a><br>` : ''}
+                        <button onclick="this.parentElement.parentElement.remove()" style="background: linear-gradient(135deg, #ff6b6b, #4ecdc4); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: bold;">
+                            Got It!
+                        </button>
+                        <br><br>
+                        <button onclick="resendVerificationEmail('${email}')" style="background: transparent; border: 2px solid #ff6b6b; color: #ff6b6b; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-size: 14px;">
+                            Resend Email
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', message);
+        }
+
+        function showEmailVerificationError(email) {
+            const message = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 10000;">
+                    <div style="background: white; border-radius: 20px; padding: 40px; max-width: 500px; width: 90%; text-align: center;">
+                        <div style="font-size: 4rem; color: #ff9800; margin-bottom: 20px;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h2 style="color: #333; margin-bottom: 15px;">Email Not Verified</h2>
+                        <p style="color: #666; margin-bottom: 20px;">
+                            Please verify your email address before logging in.<br>
+                            Check your inbox for the verification link.
+                        </p>
+                        <button onclick="this.parentElement.parentElement.remove()" style="background: linear-gradient(135deg, #ff6b6b, #4ecdc4); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; margin: 5px;">
+                            OK
+                        </button>
+                        <button onclick="resendVerificationEmail('${email}'); this.parentElement.parentElement.remove();" style="background: transparent; border: 2px solid #ff6b6b; color: #ff6b6b; padding: 8px 20px; border-radius: 20px; cursor: pointer; margin: 5px;">
+                            Resend Verification
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', message);
+        }
+
+        async function resendVerificationEmail(email) {
+            try {
+                const response = await apiCall('/auth/resend-verification', {
+                    method: 'POST',
+                    body: JSON.stringify({ email })
+                });
+                
+                alert('Verification email sent! Please check your inbox.');
+            } catch (error) {
+                alert('Failed to send verification email: ' + error.message);
+            }
         }
 
         // API functions
@@ -1115,8 +1187,9 @@
                         })
                     });
 
-                    localStorage.setItem('campuscrush_token', data.token);
-                    showSuccess('Registration successful! Welcome to CampusCrush!');
+                    // Show email verification message instead of login
+                    closeModal();
+                    showEmailVerificationMessage(data.user.email, data.previewUrl);
                 } catch (error) {
                     showError(error.message);
                 }
@@ -1138,7 +1211,12 @@
                     localStorage.setItem('campuscrush_token', data.token);
                     showSuccess('Login successful! Welcome back!');
                 } catch (error) {
-                    showError(error.message);
+                    // Handle email verification error
+                    if (error.message.includes('verify your email')) {
+                        showEmailVerificationError(formData.get('email'));
+                    } else {
+                        showError(error.message);
+                    }
                 }
             }
         });

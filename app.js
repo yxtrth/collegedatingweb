@@ -30,9 +30,20 @@ mongoose.connect(MONGODB_URI, {
 
 // Routes
 app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Verification page route
+app.get('/verify-email', (req, res) => {
+    res.sendFile(path.join(__dirname, 'verify-email.html'));
+});
+
+// API info route
+app.get('/api', (req, res) => {
     res.json({
-        message: 'Welcome to CampusCrush Backend API',
-        version: '1.0.0',
+        message: 'Welcome to College Dating Web API',
+        version: '2.0.0',
+        features: ['Email Verification', 'Real-time Auth', 'Universal Email Support'],
         endpoints: {
             auth: '/api/auth',
             profile: '/api/profile', 
