@@ -4,13 +4,20 @@ class CampusCrushDashboard {
     constructor() {
         this.baseURL = window.location.hostname === 'localhost' 
             ? 'http://localhost:5000/api' 
+<<<<<<< HEAD
             : window.location.origin + '/api';
+=======
+            : `${window.location.origin}/api`;
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
         this.token = localStorage.getItem('collegedatingbyyt_token');
         this.currentUser = null;
         this.interests = [];
         this.additionalPhotos = [];
         this.profileCompletion = 20;
+<<<<<<< HEAD
         this.hasShownIncompleteWarning = false;
+=======
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
         
         this.init();
     }
@@ -540,6 +547,7 @@ class CampusCrushDashboard {
         }
     }
 
+<<<<<<< HEAD
     // Content Loading Methods
     async loadDiscoverUsers() {
         console.log('🔍 Loading discover users...');
@@ -645,11 +653,21 @@ class CampusCrushDashboard {
                             <button class="btn btn-outline" onclick="app.showSection('profile')">Complete Profile</button>
                         </div>
                     </div>
+=======
+    // Content Loading Methods (placeholders for future implementation)
+    async loadDiscoverUsers() {
+        const container = document.getElementById('discoverContainer');
+        if (container) {
+            container.innerHTML = `
+                <div class="profile-section">
+                    <p>Discover feature coming soon! Complete your profile to start finding matches.</p>
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
                 </div>
             `;
         }
     }
 
+<<<<<<< HEAD
     showDiscoveryCard() {
         if (!this.discoveryUsers || this.currentDiscoveryIndex >= this.discoveryUsers.length) {
             this.loadDiscoverUsers(); // Reload when no more users
@@ -886,6 +904,14 @@ class CampusCrushDashboard {
                         <p>Please try again later.</p>
                         <button class="btn btn-primary" onclick="app.loadMatches()">Try Again</button>
                     </div>
+=======
+    async loadMatches() {
+        const container = document.getElementById('matchesContainer');
+        if (container) {
+            container.innerHTML = `
+                <div class="profile-section">
+                    <p>You don't have any matches yet. Complete your profile and start discovering people!</p>
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
                 </div>
             `;
         }

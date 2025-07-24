@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title>Email Verified - collegedatingbyyt</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
@@ -13,6 +14,11 @@
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
         }
 
+=======
+    <title>Email Verification - College Dating Web</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
         * {
             margin: 0;
             padding: 0;
@@ -20,18 +26,28 @@
         }
 
         body {
+<<<<<<< HEAD
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
+=======
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+<<<<<<< HEAD
             padding: 2rem;
+=======
+            padding: 20px;
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
         }
 
         .verification-container {
             background: white;
             border-radius: 20px;
+<<<<<<< HEAD
             padding: 3rem;
             max-width: 500px;
             width: 100%;
@@ -56,16 +72,66 @@
             font-weight: 800;
             margin-bottom: 1rem;
             color: #333;
+=======
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .loading {
+            display: block;
+        }
+
+        .result {
+            display: none;
+        }
+
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .success .icon {
+            color: #4CAF50;
+        }
+
+        .error .icon {
+            color: #f44336;
+        }
+
+        .loading .icon {
+            color: #2196F3;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 2rem;
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
         }
 
         p {
             color: #666;
+<<<<<<< HEAD
             margin-bottom: 2rem;
             line-height: 1.6;
+=======
+            line-height: 1.6;
+            margin-bottom: 20px;
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
         }
 
         .btn {
             display: inline-block;
+<<<<<<< HEAD
             padding: 1rem 2rem;
             background: var(--gradient);
             color: white;
@@ -105,10 +171,38 @@
 
         .hidden {
             display: none;
+=======
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        .btn-outline:hover {
+            background: #ff6b6b;
+            color: white;
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
         }
     </style>
 </head>
 <body>
+<<<<<<< HEAD
     <div class="verification-container" id="verificationResult">
         <div class="logo">college<span class="highlight">datingbyyt</span></div>
         
@@ -133,10 +227,48 @@
             <h1>Verification Failed</h1>
             <p id="errorMessage">The verification link is invalid or has expired. Please request a new verification email.</p>
             <a href="./index.html" class="btn">Back to Home</a>
+=======
+    <div class="verification-container">
+        <!-- Loading State -->
+        <div id="loading" class="loading">
+            <div class="icon">
+                <i class="fas fa-spinner"></i>
+            </div>
+            <h1>Verifying Email...</h1>
+            <p>Please wait while we verify your email address.</p>
+        </div>
+
+        <!-- Success State -->
+        <div id="success" class="result success">
+            <div class="icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h1>Email Verified! 🎉</h1>
+            <p>Congratulations! Your email has been successfully verified. You can now access all features of College Dating Web.</p>
+            <a href="/" class="btn">
+                <i class="fas fa-sign-in-alt"></i> Login Now
+            </a>
+        </div>
+
+        <!-- Error State -->
+        <div id="error" class="result error">
+            <div class="icon">
+                <i class="fas fa-times-circle"></i>
+            </div>
+            <h1>Verification Failed</h1>
+            <p id="error-message">The verification link is invalid or has expired.</p>
+            <a href="/" class="btn">
+                <i class="fas fa-home"></i> Go Home
+            </a>
+            <button onclick="resendVerification()" class="btn btn-outline">
+                <i class="fas fa-envelope"></i> Resend Email
+            </button>
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
         </div>
     </div>
 
     <script>
+<<<<<<< HEAD
         // Get URL parameters
         function getUrlParams() {
             const params = new URLSearchParams(window.location.search);
@@ -192,10 +324,36 @@
             } catch (error) {
                 console.error('Verification error:', error);
                 showError('Unable to verify email. Please check your internet connection and try again.');
+=======
+        // Get token from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        if (!token) {
+            showError('No verification token found in URL.');
+        } else {
+            verifyEmail(token);
+        }
+
+        async function verifyEmail(token) {
+            try {
+                const response = await fetch(`/api/auth/verify-email/${token}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    showSuccess();
+                } else {
+                    showError(data.message || 'Verification failed');
+                }
+            } catch (error) {
+                console.error('Verification error:', error);
+                showError('Network error. Please try again.');
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
             }
         }
 
         function showSuccess() {
+<<<<<<< HEAD
             document.getElementById('loading').classList.add('hidden');
             document.getElementById('error').classList.add('hidden');
             document.getElementById('success').classList.remove('hidden');
@@ -210,6 +368,42 @@
 
         // Start verification when page loads
         document.addEventListener('DOMContentLoaded', handleVerificationResult);
+=======
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('success').style.display = 'block';
+        }
+
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('error-message').textContent = message;
+        }
+
+        async function resendVerification() {
+            const email = prompt('Please enter your email address:');
+            if (!email) return;
+
+            try {
+                const response = await fetch('/api/auth/resend-verification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Verification email sent! Please check your inbox.');
+                } else {
+                    alert(data.message || 'Failed to send verification email');
+                }
+            } catch (error) {
+                alert('Network error. Please try again.');
+            }
+        }
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
     </script>
 </body>
 </html>

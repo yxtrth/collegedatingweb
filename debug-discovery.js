@@ -133,7 +133,11 @@ window.debugDB = async function() {
     try {
         const response = await fetch('http://localhost:5000/api/auth/me', {
             headers: {
+<<<<<<< HEAD
                 'Authorization': `Bearer ${localStorage.getItem('collegedatingbyyt_token')}`
+=======
+                'Authorization': `Bearer ${localStorage.getItem('campuscrush_token')}`
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
             }
         });
         const data = await response.json();
@@ -149,12 +153,20 @@ window.debugDB = async function() {
 
 window.debugAuth = function() {
     console.log('🔐 DEBUGGING AUTHENTICATION...');
+<<<<<<< HEAD
     console.log('Token from localStorage:', localStorage.getItem('collegedatingbyyt_token'));
+=======
+    console.log('Token from localStorage:', localStorage.getItem('campuscrush_token'));
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
     console.log('App token:', window.app ? window.app.token : 'App not loaded');
     console.log('Current user:', window.app ? window.app.currentUser : 'App not loaded');
     
     // Try to re-authenticate
+<<<<<<< HEAD
     if (localStorage.getItem('collegedatingbyyt_token')) {
+=======
+    if (localStorage.getItem('campuscrush_token')) {
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
         console.log('Token exists, trying to fetch user info...');
         if (window.app) {
             window.app.loadUserProfile();

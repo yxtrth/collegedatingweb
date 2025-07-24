@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 // Load environment variables
 require('dotenv').config();
 
+=======
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -20,6 +23,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(__dirname));
 
 // Connect to MongoDB
+<<<<<<< HEAD
 const MONGODB_URI = 'mongodb+srv://yatharth10a:yatharth21@yathsdatabase.7fir4sd.mongodb.net/collegedating?retryWrites=true&w=majority&appName=YATHSDATABASE';
 
 mongoose.connect(MONGODB_URI, {
@@ -39,13 +43,51 @@ mongoose.connect(MONGODB_URI, {
     console.error('   2. Your internet connection is stable');
     console.error('   3. MongoDB Atlas cluster is running');
     process.exit(1);
+=======
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/collegedatingweb';
+mongoose.connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+    console.log('MongoDB connected successfully');
+    console.log('Database:', MONGODB_URI.includes('localhost') ? 'Local' : 'Cloud');
+}).catch(err => {
+    console.error('MongoDB connection error:', err);
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
 });
 
 // Routes
 app.get('/', (req, res) => {
+<<<<<<< HEAD
     res.json({
         message: 'Welcome to CampusCrush Backend API',
         version: '1.0.0',
+=======
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'OK',
+        message: 'collegedatingbyyt server is running',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    });
+});
+
+// Verification page route
+app.get('/verify-email', (req, res) => {
+    res.sendFile(path.join(__dirname, 'verify-email.html'));
+});
+
+// API info route
+app.get('/api', (req, res) => {
+    res.json({
+        message: 'Welcome to collegedatingbyyt Backend API',
+        version: '2.0.0',
+        features: ['Email Verification', 'Real-time Auth', 'Universal Email Support'],
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
         endpoints: {
             auth: '/api/auth',
             profile: '/api/profile', 
@@ -118,9 +160,18 @@ app.use('*', (req, res) => {
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
+<<<<<<< HEAD
     console.log(`🚀 CampusCrush Server running on port ${PORT}`);
     console.log(`📱 Frontend URL: http://localhost:${PORT}`);
     console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);
+=======
+    console.log(`🚀 collegedatingbyyt Server running on port ${PORT}`);
+    console.log(`📱 Frontend URL: http://localhost:${PORT}`);
+    console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);
+    console.log(`✅ Deployment timestamp: ${new Date().toISOString()}`);
+    console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`💾 MongoDB URI: ${MONGODB_URI.includes('localhost') ? 'Local DB' : 'Cloud DB'}`);
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
 });
 
 module.exports = app;

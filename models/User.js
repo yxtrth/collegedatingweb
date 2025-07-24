@@ -18,12 +18,15 @@ const UserSchema = new mongoose.Schema({
         required: true,
         minlength: 6
     },
+<<<<<<< HEAD
     isVerified: {
         type: Boolean,
         default: false
     },
     verificationToken: String,
     verificationTokenExpires: Date,
+=======
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
     profile: {
         bio: {
             type: String,

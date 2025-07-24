@@ -617,6 +617,7 @@
             opacity: 1;
             transform: translateY(0);
         }
+<<<<<<< HEAD
         /* Form feedback messages */
         .error-message {
             background: #fee;
@@ -634,6 +635,8 @@
             border-radius: 8px;
             margin-bottom: 1rem;
         }
+=======
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
     </style>
 </head>
 <body>
@@ -979,6 +982,7 @@
                     border-radius: 8px;
                     margin-bottom: 1rem;
                 }
+<<<<<<< HEAD
                 .success-message {
                     background: #e6ffed;
                     border: 1px solid #b2d8c4;
@@ -987,6 +991,8 @@
                     border-radius: 8px;
                     margin-bottom: 1rem;
                 }
+=======
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
                 </style>
             `;
             
@@ -1144,14 +1150,24 @@
 
         // API functions
         async function apiCall(endpoint, options = {}) {
+<<<<<<< HEAD
+=======
+            // Use current domain for API calls, fallback to localhost for development
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
             const baseUrl = window.location.hostname === 'localhost' 
                 ? 'http://localhost:5000' 
                 : window.location.origin;
             const url = `${baseUrl}/api${endpoint}`;
+<<<<<<< HEAD
 
             console.log('Making API call to:', url); // Debug log
             console.log('Request options:', options); // Debug log
 
+=======
+            
+            console.log('Making API call to:', url); // Debug log
+            
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
             const config = {
                 headers: {
                     'Content-Type': 'application/json',
@@ -1162,27 +1178,60 @@
 
             try {
                 const response = await fetch(url, config);
+<<<<<<< HEAD
 
                 console.log('Response status:', response.status); // Debug log
                 console.log('Response headers:', response.headers); // Debug log
 
                 if (!response.ok) {
+=======
+                
+                // Check if response is ok
+                if (!response.ok) {
+                    // Try to get error message from response
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
                     let errorMessage = 'API request failed';
                     try {
                         const errorData = await response.json();
                         errorMessage = errorData.message || errorData.error || errorMessage;
+<<<<<<< HEAD
                         console.log('Error response data:', errorData); // Debug log
+=======
+                        if (errorData.errors && Array.isArray(errorData.errors)) {
+                            errorMessage = errorData.errors.map(e => e.msg).join(', ');
+                        }
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
                     } catch (jsonError) {
                         errorMessage = `HTTP ${response.status}: ${response.statusText}`;
                     }
                     throw new Error(errorMessage);
                 }
 
+<<<<<<< HEAD
                 const data = await response.json();
                 console.log('Response data:', data); // Debug log
                 return data;
             } catch (error) {
                 console.error('API Error:', error);
+=======
+                // Try to parse JSON response
+                const data = await response.json();
+                return data;
+                
+            } catch (error) {
+                console.error('API Error:', error);
+                
+                // Handle network errors
+                if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    throw new Error('Unable to connect to server. Please check your internet connection.');
+                }
+                
+                // Handle JSON parse errors
+                if (error.message.includes('Unexpected end of JSON input')) {
+                    throw new Error('Server returned invalid response. Please try again.');
+                }
+                
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
                 throw error;
             }
         }
@@ -1200,6 +1249,7 @@
         }
 
         function showSuccess(message) {
+<<<<<<< HEAD
             // Show success message
             alert(message);
             closeModal();
@@ -1218,6 +1268,14 @@
                 form.insertBefore(successDiv, form.firstChild);
                 setTimeout(() => successDiv.remove(), 5000);
             }
+=======
+            alert(message); // Simple success message for now
+            closeModal();
+            // Redirect to dashboard after successful login/signup
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
         }
 
         // Event delegation for forms
@@ -1261,6 +1319,7 @@
                         })
                     });
 
+<<<<<<< HEAD
                     // Store token and redirect
                     localStorage.setItem('collegedatingbyyt_token', data.token);
                     
@@ -1268,6 +1327,10 @@
                     closeModal();
                     window.location.href = './dashboard.html';
                     
+=======
+                    localStorage.setItem('collegedatingbyyt_token', data.token);
+                    showSuccess('Login successful! Welcome back!');
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
                 } catch (error) {
                     // Handle email verification error
                     if (error.message.includes('verify your email')) {

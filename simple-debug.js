@@ -5,7 +5,11 @@ async function quickDebug() {
     console.log('🚀 Starting Quick Debug...');
     
     // Get token
+<<<<<<< HEAD
     const token = localStorage.getItem('collegedatingbyyt_token');
+=======
+    const token = localStorage.getItem('campuscrush_token');
+>>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
     console.log('🔑 Token:', token ? 'EXISTS' : 'MISSING');
     
     if (!token) {
