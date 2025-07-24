@@ -41,7 +41,7 @@ app.get('/verify-email', (req, res) => {
 // API info route
 app.get('/api', (req, res) => {
     res.json({
-        message: 'Welcome to College Dating Web API',
+        message: 'Welcome to collegedatingbyyt Backend API',
         version: '2.0.0',
         features: ['Email Verification', 'Real-time Auth', 'Universal Email Support'],
         endpoints: {
@@ -116,7 +116,7 @@ app.use('*', (req, res) => {
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`🚀 CampusCrush Server running on port ${PORT}`);
+    console.log(`🚀 collegedatingbyyt Server running on port ${PORT}`);
     console.log(`📱 Frontend URL: http://localhost:${PORT}`);
     console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);
 });
