@@ -2,9 +2,56 @@ const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch
 require('dotenv').config();
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:5000';
-const JWT_TOKEN = process.env.JWT_SECRET || 'test-token';
+let JWT_TOKEN = null;
 
 console.log('🔧 Testing API Endpoints...\n');
+
+// Test 0: Login to get valid JWT token
+async function loginAndGetToken() {
+    console.log('0. 🔑 Authentication Test:');
+    try {
+        // First try to register a test user
+        const registerResponse = await fetch(`${BASE_URL}/api/auth/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                fullName: 'Test User',
+                email: 'testuser@college.edu',
+                password: 'testpassword123',
+                dateOfBirth: '2000-01-01',
+                gender: 'Other',
+                college: 'Test College'
+            })
+        });
+
+        // If registration fails (user might already exist), try to login
+        const loginResponse = await fetch(`${BASE_URL}/api/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: 'testuser@college.edu',
+                password: 'testpassword123'
+            })
+        });
+
+        if (loginResponse.ok) {
+            const loginData = await loginResponse.json();
+            JWT_TOKEN = loginData.token;
+            console.log('   ✅ Authentication successful, token obtained');
+            return true;
+        } else {
+            console.error('   ❌ Authentication failed:', loginResponse.status);
+            return false;
+        }
+    } catch (error) {
+        console.error('   ❌ Authentication Error:', error.message);
+        return false;
+    }
+}
 
 // Test 1: Discover API
 async function testDiscoverAPI() {
@@ -57,6 +104,11 @@ async function testUploadProfilePhotoAPI() {
 
 // Run tests
 (async () => {
-    await testDiscoverAPI();
-    await testUploadProfilePhotoAPI();
+    const authSuccess = await loginAndGetToken();
+    if (authSuccess) {
+        await testDiscoverAPI();
+        await testUploadProfilePhotoAPI();
+    } else {
+        console.log('❌ Skipping API tests due to authentication failure');
+    }
 })();
