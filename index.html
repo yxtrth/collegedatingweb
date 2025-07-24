@@ -1062,15 +1062,40 @@
 
             try {
                 const response = await fetch(url, config);
-                const data = await response.json();
-
+                
+                // Check if response is ok
                 if (!response.ok) {
-                    throw new Error(data.message || 'API request failed');
+                    // Try to get error message from response
+                    let errorMessage = 'API request failed';
+                    try {
+                        const errorData = await response.json();
+                        errorMessage = errorData.message || errorData.error || errorMessage;
+                        if (errorData.errors && Array.isArray(errorData.errors)) {
+                            errorMessage = errorData.errors.map(e => e.msg).join(', ');
+                        }
+                    } catch (jsonError) {
+                        errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+                    }
+                    throw new Error(errorMessage);
                 }
 
+                // Try to parse JSON response
+                const data = await response.json();
                 return data;
+                
             } catch (error) {
                 console.error('API Error:', error);
+                
+                // Handle network errors
+                if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    throw new Error('Unable to connect to server. Please check your internet connection.');
+                }
+                
+                // Handle JSON parse errors
+                if (error.message.includes('Unexpected end of JSON input')) {
+                    throw new Error('Server returned invalid response. Please try again.');
+                }
+                
                 throw error;
             }
         }
