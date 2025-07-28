@@ -1,14 +1,10 @@
 const https = require('https');
-
 console.log('🔍 Getting your current IP address...\n');
-
 https.get('https://ipinfo.io/json', (res) => {
     let data = '';
-    
     res.on('data', (chunk) => {
         data += chunk;
     });
-    
     res.on('end', () => {
         try {
             const ipInfo = JSON.parse(data);
@@ -20,7 +16,6 @@ https.get('https://ipinfo.io/json', (res) => {
             console.log(`🏳️  Country: ${ipInfo.country}`);
             console.log(`🏢 ISP: ${ipInfo.org}`);
             console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-            
             console.log('✅ STEPS TO FIX MONGODB ATLAS CONNECTION:');
             console.log('1. Go to https://cloud.mongodb.com/');
             console.log('2. Login to your MongoDB Atlas account');

@@ -1,11 +1,8 @@
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 require('dotenv').config();
-
 const BASE_URL = process.env.BASE_URL || 'http://localhost:5000';
 let JWT_TOKEN = null;
-
 console.log('🔧 Testing API Endpoints...\n');
-
 // Test 0: Login to get valid JWT token
 async function loginAndGetToken() {
     console.log('0. 🔑 Authentication Test:');
@@ -25,7 +22,6 @@ async function loginAndGetToken() {
                 college: 'Test College'
             })
         });
-
         // If registration fails (user might already exist), try to login
         const loginResponse = await fetch(`${BASE_URL}/api/auth/login`, {
             method: 'POST',
@@ -37,7 +33,6 @@ async function loginAndGetToken() {
                 password: 'testpassword123'
             })
         });
-
         if (loginResponse.ok) {
             const loginData = await loginResponse.json();
             JWT_TOKEN = loginData.token;
@@ -52,7 +47,6 @@ async function loginAndGetToken() {
         return false;
     }
 }
-
 // Test 1: Discover API
 async function testDiscoverAPI() {
     console.log('1. 🔍 Discover API Test:');
@@ -64,25 +58,21 @@ async function testDiscoverAPI() {
                 'Content-Type': 'application/json'
             }
         });
-
         if (!response.ok) {
             throw new Error(`Failed with status ${response.status}`);
         }
-
         const data = await response.json();
         console.log('   ✅ Discover API Response:', data);
     } catch (error) {
         console.error('   ❌ Discover API Error:', error.message);
     }
 }
-
 // Test 2: Upload Profile Photo API
 async function testUploadProfilePhotoAPI() {
     console.log('\n2. 📸 Upload Profile Photo API Test:');
     try {
         const formData = new FormData();
         formData.append('profilePicture', new Blob(['test-image'], { type: 'image/png' }), 'test.png');
-
         const response = await fetch(`${BASE_URL}/api/profile/me/upload-photo`, {
             method: 'POST',
             headers: {
@@ -90,18 +80,15 @@ async function testUploadProfilePhotoAPI() {
             },
             body: formData
         });
-
         if (!response.ok) {
             throw new Error(`Failed with status ${response.status}`);
         }
-
         const data = await response.json();
         console.log('   ✅ Upload Profile Photo API Response:', data);
     } catch (error) {
         console.error('   ❌ Upload Profile Photo API Error:', error.message);
     }
 }
-
 // Run tests
 (async () => {
     const authSuccess = await loginAndGetToken();

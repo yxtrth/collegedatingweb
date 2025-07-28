@@ -1,34 +1,24 @@
 // CampusCrush Dashboard JavaScript
-
 class CampusCrushDashboard {
     constructor() {
         this.baseURL = window.location.hostname === 'localhost' 
             ? 'http://localhost:5000/api' 
-<<<<<<< HEAD
             : window.location.origin + '/api';
-=======
             : `${window.location.origin}/api`;
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
         this.token = localStorage.getItem('collegedatingbyyt_token');
         this.currentUser = null;
         this.interests = [];
         this.additionalPhotos = [];
         this.profileCompletion = 20;
-<<<<<<< HEAD
         this.hasShownIncompleteWarning = false;
-=======
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
-        
         this.init();
     }
-
     async init() {
         // Check authentication
         if (!this.token) {
             window.location.href = 'index.html';
             return;
         }
-
         try {
             await this.getCurrentUser();
             this.updateUI();
@@ -40,7 +30,6 @@ class CampusCrushDashboard {
             this.logout();
         }
     }
-
     // API Helper Methods
     async apiCall(endpoint, options = {}) {
         const url = `${this.baseURL}${endpoint}`;
@@ -52,22 +41,18 @@ class CampusCrushDashboard {
             },
             ...options
         };
-
         try {
             const response = await fetch(url, config);
             const data = await response.json();
-
             if (!response.ok) {
                 throw new Error(data.message || 'API request failed');
             }
-
             return data;
         } catch (error) {
             console.error('API Error:', error);
             throw error;
         }
     }
-
     // Authentication Methods
     async getCurrentUser() {
         try {
@@ -78,31 +63,24 @@ class CampusCrushDashboard {
             throw new Error('Failed to get current user');
         }
     }
-
     logout() {
         localStorage.removeItem('collegedatingbyyt_token');
         window.location.href = 'index.html';
     }
-
     // UI Methods
     updateUI() {
         if (this.currentUser) {
             const userName = document.getElementById('userName');
             const userAvatar = document.getElementById('userAvatar');
-            
             if (userName) userName.textContent = this.currentUser.name;
             if (userAvatar) userAvatar.textContent = this.currentUser.name.charAt(0).toUpperCase();
-
             // Populate form fields with existing data
             this.populateFormFields();
         }
     }
-
     populateFormFields() {
         if (!this.currentUser.profile) return;
-
         const profile = this.currentUser.profile;
-
         // Basic info form
         const basicForm = document.getElementById('basicInfoForm');
         if (basicForm && profile) {
@@ -111,24 +89,20 @@ class CampusCrushDashboard {
             if (profile.year) basicForm.year.value = profile.year;
             if (profile.lookingFor) basicForm.lookingFor.value = profile.lookingFor;
         }
-
         // Interests
         if (profile.interests && profile.interests.length > 0) {
             this.interests = [...profile.interests];
             this.updateInterestsDisplay();
         }
-
         // Profile photo
         if (profile.profilePicture) {
             this.displayProfilePhoto(profile.profilePicture);
         }
-
         // Additional photos
         if (profile.photos && profile.photos.length > 0) {
             this.additionalPhotos = [...profile.photos];
             this.updateAdditionalPhotosDisplay();
         }
-
         // Preferences
         if (this.currentUser.preferences) {
             const prefs = this.currentUser.preferences;
@@ -145,20 +119,17 @@ class CampusCrushDashboard {
             }
         }
     }
-
     setupEventListeners() {
         // Basic info form
         const basicInfoForm = document.getElementById('basicInfoForm');
         if (basicInfoForm) {
             basicInfoForm.addEventListener('submit', this.handleBasicInfoSubmit.bind(this));
         }
-
         // Preferences form
         const preferencesForm = document.getElementById('preferencesForm');
         if (preferencesForm) {
             preferencesForm.addEventListener('submit', this.handlePreferencesSubmit.bind(this));
         }
-
         // Interest input enter key
         const interestInput = document.getElementById('interestInput');
         if (interestInput) {
@@ -169,7 +140,6 @@ class CampusCrushDashboard {
                 }
             });
         }
-
         // Profile photo click
         const profilePhotoPreview = document.getElementById('profilePhotoPreview');
         if (profilePhotoPreview) {
@@ -178,28 +148,23 @@ class CampusCrushDashboard {
             });
         }
     }
-
     // Navigation
     showSection(sectionName) {
         // Hide all sections
         const sections = document.querySelectorAll('.content-section');
         sections.forEach(section => section.classList.add('hidden'));
-
         // Show selected section
         const targetSection = document.getElementById(`${sectionName}-section`);
         if (targetSection) {
             targetSection.classList.remove('hidden');
         }
-
         // Update navigation
         const navItems = document.querySelectorAll('.nav-item');
         navItems.forEach(item => item.classList.remove('active'));
-        
         const activeNavItem = document.querySelector(`[onclick="showSection('${sectionName}')"]`);
         if (activeNavItem) {
             activeNavItem.classList.add('active');
         }
-
         // Load section-specific content
         switch (sectionName) {
             case 'discover':
@@ -213,12 +178,10 @@ class CampusCrushDashboard {
                 break;
         }
     }
-
     // Form Handlers
     async handleBasicInfoSubmit(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
-        
         try {
             const updateData = {
                 profile: {
@@ -228,12 +191,10 @@ class CampusCrushDashboard {
                     lookingFor: formData.get('lookingFor')
                 }
             };
-
             const response = await this.apiCall('/profile/me/update', {
                 method: 'PUT',
                 body: JSON.stringify(updateData)
             });
-
             this.currentUser = response.user;
             this.showSuccess('Basic information updated successfully!');
             this.calculateProgress();
@@ -241,11 +202,9 @@ class CampusCrushDashboard {
             this.showError(error.message);
         }
     }
-
     async handlePreferencesSubmit(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
-        
         try {
             const updateData = {
                 preferences: {
@@ -257,12 +216,10 @@ class CampusCrushDashboard {
                     interestedIn: formData.get('interestedIn')
                 }
             };
-
             const response = await this.apiCall('/profile/me/update', {
                 method: 'PUT',
                 body: JSON.stringify(updateData)
             });
-
             this.currentUser = response.user;
             this.showSuccess('Preferences updated successfully!');
             this.calculateProgress();
@@ -270,12 +227,10 @@ class CampusCrushDashboard {
             this.showError(error.message);
         }
     }
-
     // Interests Management
     addInterest() {
         const interestInput = document.getElementById('interestInput');
         const interest = interestInput.value.trim();
-        
         if (interest && !this.interests.includes(interest)) {
             this.interests.push(interest);
             this.updateInterestsDisplay();
@@ -283,17 +238,14 @@ class CampusCrushDashboard {
             interestInput.value = '';
         }
     }
-
     removeInterest(interest) {
         this.interests = this.interests.filter(i => i !== interest);
         this.updateInterestsDisplay();
         this.saveInterests();
     }
-
     updateInterestsDisplay() {
         const container = document.getElementById('interestsContainer');
         if (!container) return;
-
         container.innerHTML = this.interests.map(interest => `
             <div class="interest-tag">
                 ${interest}
@@ -301,7 +253,6 @@ class CampusCrushDashboard {
             </div>
         `).join('');
     }
-
     async saveInterests() {
         try {
             const updateData = {
@@ -309,24 +260,20 @@ class CampusCrushDashboard {
                     interests: this.interests
                 }
             };
-
             const response = await this.apiCall('/profile/me/update', {
                 method: 'PUT',
                 body: JSON.stringify(updateData)
             });
-
             this.currentUser = response.user;
             this.calculateProgress();
         } catch (error) {
             console.error('Failed to save interests:', error);
         }
     }
-
     // Photo Management
     initializePhotoSlots() {
         const container = document.getElementById('additionalPhotos');
         if (!container) return;
-
         // Create 5 photo slots
         for (let i = 0; i < 5; i++) {
             const slot = document.createElement('div');
@@ -341,7 +288,6 @@ class CampusCrushDashboard {
             container.appendChild(slot);
         }
     }
-
     previewProfilePhoto(input) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
@@ -349,24 +295,20 @@ class CampusCrushDashboard {
                 this.displayProfilePhoto(e.target.result);
             };
             reader.readAsDataURL(input.files[0]);
-            
             // Upload the photo
             this.uploadProfilePhoto(input.files[0]);
         }
     }
-
     displayProfilePhoto(imageSrc) {
         const preview = document.getElementById('profilePhotoPreview');
         if (preview) {
             preview.innerHTML = `<img src="${imageSrc}" alt="Profile Photo">`;
         }
     }
-
     async uploadProfilePhoto(file) {
         try {
             const formData = new FormData();
             formData.append('profilePicture', file);
-
             const response = await fetch(`${this.baseURL}/profile/me/upload-photo`, {
                 method: 'POST',
                 headers: {
@@ -374,11 +316,9 @@ class CampusCrushDashboard {
                 },
                 body: formData
             });
-
             if (!response.ok) {
                 throw new Error('Failed to upload photo');
             }
-
             const data = await response.json();
             this.showSuccess('Profile picture uploaded successfully!');
             this.calculateProgress();
@@ -386,12 +326,10 @@ class CampusCrushDashboard {
             this.showError('Failed to upload profile picture: ' + error.message);
         }
     }
-
     selectPhotoSlot(index) {
         this.selectedPhotoSlot = index;
         document.getElementById('additionalPhotoInput').click();
     }
-
     addAdditionalPhotos(input) {
         if (input.files && input.files.length > 0) {
             Array.from(input.files).forEach((file, index) => {
@@ -404,15 +342,12 @@ class CampusCrushDashboard {
                     reader.readAsDataURL(file);
                 }
             });
-            
             // Upload photos
             this.uploadAdditionalPhotos(input.files);
         }
     }
-
     updateAdditionalPhotosDisplay() {
         const slots = document.querySelectorAll('#additionalPhotos .photo-slot');
-        
         slots.forEach((slot, index) => {
             if (this.additionalPhotos[index]) {
                 slot.innerHTML = `
@@ -429,20 +364,17 @@ class CampusCrushDashboard {
             }
         });
     }
-
     removeAdditionalPhoto(index) {
         this.additionalPhotos.splice(index, 1);
         this.updateAdditionalPhotosDisplay();
         // TODO: Call API to remove photo from server
     }
-
     async uploadAdditionalPhotos(files) {
         try {
             const formData = new FormData();
             Array.from(files).forEach(file => {
                 formData.append('photos', file);
             });
-
             const response = await fetch(`${this.baseURL}/profile/me/upload-photos`, {
                 method: 'POST',
                 headers: {
@@ -450,11 +382,9 @@ class CampusCrushDashboard {
                 },
                 body: formData
             });
-
             if (!response.ok) {
                 throw new Error('Failed to upload photos');
             }
-
             const data = await response.json();
             this.showSuccess('Photos uploaded successfully!');
             this.calculateProgress();
@@ -462,52 +392,40 @@ class CampusCrushDashboard {
             this.showError('Failed to upload photos: ' + error.message);
         }
     }
-
     // Progress Calculation
     calculateProgress() {
         let progress = 20; // Base progress for account creation
-        
         if (this.currentUser && this.currentUser.profile) {
             const profile = this.currentUser.profile;
-            
             // Basic info (30%)
             if (profile.bio && profile.bio.length > 20) progress += 10;
             if (profile.major) progress += 5;
             if (profile.year) progress += 5;
             if (profile.lookingFor) progress += 10;
-            
             // Profile photo (20%)
             if (profile.profilePicture) progress += 20;
-            
             // Interests (15%)
             if (profile.interests && profile.interests.length >= 3) progress += 15;
             else if (profile.interests && profile.interests.length > 0) progress += 5;
-            
             // Additional photos (10%)
             if (profile.photos && profile.photos.length >= 2) progress += 10;
             else if (profile.photos && profile.photos.length > 0) progress += 5;
-            
             // Preferences (5%)
             if (this.currentUser.preferences && this.currentUser.preferences.ageRange) progress += 5;
         }
-        
         this.profileCompletion = Math.min(progress, 100);
         this.updateProgressDisplay();
     }
-
     updateProgressDisplay() {
         const progressFill = document.getElementById('progressFill');
         const progressText = document.getElementById('progressText');
-        
         if (progressFill) {
             progressFill.style.width = `${this.profileCompletion}%`;
         }
-        
         if (progressText) {
             progressText.textContent = `${this.profileCompletion}%`;
         }
     }
-
     // Utility Methods
     updateDistanceValue(value) {
         const distanceValue = document.getElementById('distanceValue');
@@ -515,20 +433,16 @@ class CampusCrushDashboard {
             distanceValue.textContent = `${value} miles`;
         }
     }
-
     showSuccess(message) {
         this.showNotification(message, 'success');
     }
-
     showError(message) {
         this.showNotification(message, 'error');
     }
-
     showNotification(message, type) {
         // Remove existing notifications
         const existing = document.querySelectorAll('.notification');
         existing.forEach(n => n.remove());
-
         // Create notification
         const notification = document.createElement('div');
         notification.className = `message ${type}`;
@@ -536,18 +450,14 @@ class CampusCrushDashboard {
             <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
             ${message}
         `;
-        
         // Add to top of content
         const content = document.querySelector('.content');
         if (content) {
             content.insertBefore(notification, content.firstChild);
-            
             // Auto remove after 5 seconds
             setTimeout(() => notification.remove(), 5000);
         }
     }
-
-<<<<<<< HEAD
     // Content Loading Methods
     async loadDiscoverUsers() {
         console.log('🔍 Loading discover users...');
@@ -556,22 +466,18 @@ class CampusCrushDashboard {
             console.error('❌ discoverContainer not found');
             return;
         }
-
         try {
             // Show loading state
             container.innerHTML = '<div class="loading">Loading potential matches...</div>';
             console.log('📡 Making API call to /match/discover...');
-
             // Check if profile is incomplete and show encouragement banner
             const profileIncomplete = false; // Temporarily disable profile completion check
             console.log('📊 Profile completion:', this.profileCompletion, '% - Incomplete:', profileIncomplete);
-            
             // Fetch potential matches
             const response = await this.apiCall('/match/discover');
             console.log('✅ API response received:', response);
             const users = response.users || response; // Handle both response formats
             console.log('👥 Users for discovery:', users.length);
-            
             if (users.length === 0) {
                 container.innerHTML = `
                     <div class="profile-section">
@@ -589,7 +495,6 @@ class CampusCrushDashboard {
                 `;
                 return;
             }
-
             // Show profile completion banner if incomplete
             const profileBanner = profileIncomplete ? `
                 <div class="profile-incomplete-banner">
@@ -603,7 +508,6 @@ class CampusCrushDashboard {
                     </div>
                 </div>
             ` : '';
-
             // Create discovery interface
             container.innerHTML = `
                 ${profileBanner}
@@ -630,17 +534,14 @@ class CampusCrushDashboard {
                     </div>
                 </div>
             `;
-
             // Store users and show first one
             this.discoveryUsers = users;
             this.currentDiscoveryIndex = 0;
             this.showDiscoveryCard();
-
         } catch (error) {
             console.error('❌ Error loading discovery users:', error);
             console.error('Token:', this.token ? 'Present' : 'Missing');
             console.error('Base URL:', this.baseURL);
-            
             container.innerHTML = `
                 <div class="profile-section">
                     <div class="error-state">
@@ -653,7 +554,6 @@ class CampusCrushDashboard {
                             <button class="btn btn-outline" onclick="app.showSection('profile')">Complete Profile</button>
                         </div>
                     </div>
-=======
     // Content Loading Methods (placeholders for future implementation)
     async loadDiscoverUsers() {
         const container = document.getElementById('discoverContainer');
@@ -661,28 +561,21 @@ class CampusCrushDashboard {
             container.innerHTML = `
                 <div class="profile-section">
                     <p>Discover feature coming soon! Complete your profile to start finding matches.</p>
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
                 </div>
             `;
         }
     }
-
-<<<<<<< HEAD
     showDiscoveryCard() {
         if (!this.discoveryUsers || this.currentDiscoveryIndex >= this.discoveryUsers.length) {
             this.loadDiscoverUsers(); // Reload when no more users
             return;
         }
-
         const user = this.discoveryUsers[this.currentDiscoveryIndex];
         const cardContainer = document.getElementById('currentCard');
-        
         if (!cardContainer) return;
-
         // Calculate age from birth date or use profile age
         const age = user.profile?.age || user.age || 'N/A';
         const interests = user.profile?.interests || [];
-        
         cardContainer.innerHTML = `
             <div class="discovery-card-inner">
                 <div class="discovery-photo">
@@ -714,33 +607,27 @@ class CampusCrushDashboard {
                 </div>
             </div>
         `;
-
         // Update counter
         const currentIndexEl = document.getElementById('currentIndex');
         if (currentIndexEl) {
             currentIndexEl.textContent = this.currentDiscoveryIndex + 1;
         }
     }
-
     async handleSwipe(action) {
         if (!this.discoveryUsers || this.currentDiscoveryIndex >= this.discoveryUsers.length) {
             return;
         }
-
         const currentUser = this.discoveryUsers[this.currentDiscoveryIndex];
-        
         // Show gentle reminder for incomplete profiles on first swipe
         if (this.profileCompletion < 50 && !this.hasShownIncompleteWarning) {
             this.hasShownIncompleteWarning = true;
             this.showProfileIncompleteReminder();
         }
-        
         try {
             if (action === 'like' || action === 'superlike') {
                 const response = await this.apiCall(`/match/like/${currentUser._id}`, {
                     method: 'POST'
                 });
-                
                 // Show match notification if it's a match
                 if (response.isMatch) {
                     this.showMatchNotification(currentUser);
@@ -752,16 +639,13 @@ class CampusCrushDashboard {
                     method: 'POST'
                 });
             }
-
             // Move to next user
             this.currentDiscoveryIndex++;
-            
             // Add swipe animation
             const card = document.getElementById('currentCard');
             if (card) {
                 card.style.transform = action === 'like' || action === 'superlike' ? 'translateX(100%)' : 'translateX(-100%)';
                 card.style.opacity = '0';
-                
                 setTimeout(() => {
                     this.showDiscoveryCard();
                     card.style.transform = 'translateX(0)';
@@ -770,13 +654,11 @@ class CampusCrushDashboard {
             } else {
                 this.showDiscoveryCard();
             }
-
         } catch (error) {
             console.error('Error handling swipe:', error);
             this.showMessage('Error processing your action. Please try again.', 'error');
         }
     }
-
     showProfileIncompleteReminder() {
         const reminder = document.createElement('div');
         reminder.className = 'profile-reminder-popup';
@@ -794,9 +676,7 @@ class CampusCrushDashboard {
                 </div>
             </div>
         `;
-        
         document.body.appendChild(reminder);
-        
         // Auto remove after 8 seconds
         setTimeout(() => {
             if (reminder.parentElement) {
@@ -804,7 +684,6 @@ class CampusCrushDashboard {
             }
         }, 8000);
     }
-
     showMatchNotification(user) {
         const notification = document.createElement('div');
         notification.className = 'match-notification';
@@ -818,9 +697,7 @@ class CampusCrushDashboard {
                 </div>
             </div>
         `;
-        
         document.body.appendChild(notification);
-        
         // Auto remove after 5 seconds
         setTimeout(() => {
             if (notification.parentElement) {
@@ -828,30 +705,23 @@ class CampusCrushDashboard {
             }
         }, 5000);
     }
-
     showLikeNotification() {
         const notification = document.createElement('div');
         notification.className = 'like-notification';
         notification.innerHTML = '<p>👍 Liked! Maybe they\'ll like you back!</p>';
-        
         document.body.appendChild(notification);
-        
         setTimeout(() => {
             if (notification.parentElement) {
                 notification.remove();
             }
         }, 2000);
     }
-
     async loadMatches() {
         const container = document.getElementById('matchesContainer');
         if (!container) return;
-
         try {
             container.innerHTML = '<div class="loading">Loading your matches...</div>';
-            
             const matches = await this.apiCall('/match/me/matches');
-            
             if (matches.length === 0) {
                 container.innerHTML = `
                     <div class="profile-section">
@@ -865,7 +735,6 @@ class CampusCrushDashboard {
                 `;
                 return;
             }
-
             // Display matches
             const matchesHTML = matches.map(match => `
                 <div class="match-card">
@@ -887,13 +756,11 @@ class CampusCrushDashboard {
                     </button>
                 </div>
             `).join('');
-
             container.innerHTML = `
                 <div class="matches-grid">
                     ${matchesHTML}
                 </div>
             `;
-
         } catch (error) {
             console.error('Error loading matches:', error);
             container.innerHTML = `
@@ -904,19 +771,16 @@ class CampusCrushDashboard {
                         <p>Please try again later.</p>
                         <button class="btn btn-primary" onclick="app.loadMatches()">Try Again</button>
                     </div>
-=======
     async loadMatches() {
         const container = document.getElementById('matchesContainer');
         if (container) {
             container.innerHTML = `
                 <div class="profile-section">
                     <p>You don't have any matches yet. Complete your profile and start discovering people!</p>
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
                 </div>
             `;
         }
     }
-
     async loadConversations() {
         const container = document.getElementById('messagesContainer');
         if (container) {
@@ -928,44 +792,37 @@ class CampusCrushDashboard {
         }
     }
 }
-
 // Global functions for HTML onclick events
 function showSection(sectionName) {
     if (window.app) {
         window.app.showSection(sectionName);
     }
 }
-
 function logout() {
     if (window.app) {
         window.app.logout();
     }
 }
-
 function addInterest() {
     if (window.app) {
         window.app.addInterest();
     }
 }
-
 function previewProfilePhoto(input) {
     if (window.app) {
         window.app.previewProfilePhoto(input);
     }
 }
-
 function addAdditionalPhotos(input) {
     if (window.app) {
         window.app.addAdditionalPhotos(input);
     }
 }
-
 function updateDistanceValue(value) {
     if (window.app) {
         window.app.updateDistanceValue(value);
     }
 }
-
 // Initialize the dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new CampusCrushDashboard();

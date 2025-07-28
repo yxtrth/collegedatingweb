@@ -1,22 +1,15 @@
 // Simple debug script for discovery issues
 console.log('🔧 Simple Debug Script Loaded');
-
 async function quickDebug() {
     console.log('🚀 Starting Quick Debug...');
-    
     // Get token
-<<<<<<< HEAD
     const token = localStorage.getItem('collegedatingbyyt_token');
-=======
     const token = localStorage.getItem('campuscrush_token');
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
     console.log('🔑 Token:', token ? 'EXISTS' : 'MISSING');
-    
     if (!token) {
         console.error('❌ No token found!');
         return;
     }
-    
     // Test database stats
     try {
         console.log('📊 Testing database stats...');
@@ -26,7 +19,6 @@ async function quickDebug() {
                 'Content-Type': 'application/json'
             }
         });
-        
         if (statsResponse.ok) {
             const stats = await statsResponse.json();
             console.log('📊 Database Stats:', stats);
@@ -36,7 +28,6 @@ async function quickDebug() {
     } catch (error) {
         console.error('❌ Stats error:', error);
     }
-    
     // Test discovery
     try {
         console.log('🔍 Testing discovery...');
@@ -46,15 +37,12 @@ async function quickDebug() {
                 'Content-Type': 'application/json'
             }
         });
-        
         console.log('Response Status:', response.status);
-        
         if (response.ok) {
             const data = await response.json();
             console.log('✅ Discovery Success!');
             console.log('Users found:', data.users ? data.users.length : 0);
             console.log('Debug info:', data.debug);
-            
             // Try to show in UI
             const container = document.getElementById('discoverContainer');
             if (container && data.users && data.users.length > 0) {
@@ -78,13 +66,11 @@ async function quickDebug() {
         console.error('❌ Discovery error:', error);
     }
 }
-
 // Add a simple debug button
 const debugBtn = document.createElement('button');
 debugBtn.textContent = '🔧 Quick Debug';
 debugBtn.style.cssText = 'position: fixed; top: 50px; right: 10px; z-index: 9999; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;';
 debugBtn.onclick = quickDebug;
 document.body.appendChild(debugBtn);
-
 console.log('✅ Quick debug ready! Click the blue button or run quickDebug()');
 window.quickDebug = quickDebug;

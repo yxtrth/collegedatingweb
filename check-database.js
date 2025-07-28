@@ -2,27 +2,21 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const User = require('./models/User');
-
 const MONGODB_URI = process.env.MONGODB_URI;
-
 mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(async () => {
     console.log('✅ Connected to MongoDB');
-    
     const totalUsers = await User.countDocuments({});
     const completeProfiles = await User.countDocuments({ isProfileComplete: true });
     const activeUsers = await User.countDocuments({ isActive: true });
-    
     console.log(`📊 Database Stats:`);
     console.log(`   Total users: ${totalUsers}`);
     console.log(`   Complete profiles: ${completeProfiles}`);
     console.log(`   Active users: ${activeUsers}`);
-    
     if (totalUsers === 0) {
         console.log('\n🔄 Creating test users...');
-        
         const testUsers = [
             {
                 name: 'Alex Johnson',
@@ -79,24 +73,19 @@ mongoose.connect(MONGODB_URI, {
                 dislikes: []
             }
         ];
-        
         await User.insertMany(testUsers);
         console.log('✅ Test users created!');
     }
-    
     // Test discovery query
     const discoveryUsers = await User.find({
         isProfileComplete: true,
         isActive: true
     }).limit(5);
-    
     console.log(`\n🔍 Discovery Test: Found ${discoveryUsers.length} users`);
     discoveryUsers.forEach(user => {
         console.log(`   - ${user.name} (${user.profile?.college || 'No college'})`);
     });
-    
     process.exit(0);
-    
 }).catch(err => {
     console.error('❌ Database error:', err.message);
     process.exit(1);

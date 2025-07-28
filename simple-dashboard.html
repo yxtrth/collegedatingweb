@@ -52,18 +52,14 @@
 <body>
     <div class="container">
         <h1>🎯 Simple Dashboard Test</h1>
-        
         <div id="authStatus"></div>
-        
         <div>
             <button onclick="checkAuth()">Check Authentication</button>
             <button onclick="goToLogin()">Back to Login</button>
             <button onclick="clearAll()">Clear Storage & Refresh</button>
         </div>
-
         <div id="console"></div>
     </div>
-
     <script>
         function log(message, type = 'info') {
             const console = document.getElementById('console');
@@ -72,39 +68,30 @@
             console.scrollTop = console.scrollHeight;
             console.log(message);
         }
-
         function updateStatus(message, type) {
             const status = document.getElementById('authStatus');
             status.className = `status ${type}`;
             status.innerHTML = message;
         }
-
         function checkAuth() {
             log('🔍 Checking authentication...');
-            
             const token = localStorage.getItem('collegedatingbyyt_token');
-            
             if (!token) {
                 log('❌ No token found in localStorage');
                 updateStatus('❌ No authentication token found. Please log in.', 'error');
                 return;
             }
-            
             log('✅ Token found: ' + token.substring(0, 30) + '...');
             updateStatus('✅ Token found! You should be able to access the dashboard.', 'success');
-            
             // Test API call
             testAPI();
         }
-
         async function testAPI() {
             log('📡 Testing API connection...');
-            
             const token = localStorage.getItem('collegedatingbyyt_token');
             const baseUrl = window.location.hostname === 'localhost' 
                 ? 'http://localhost:5000/api' 
                 : window.location.origin + '/api';
-            
             try {
                 const response = await fetch(`${baseUrl}/auth/me`, {
                     headers: {
@@ -112,9 +99,7 @@
                         'Content-Type': 'application/json'
                     }
                 });
-
                 log(`📊 API Response status: ${response.status}`);
-                
                 if (response.ok) {
                     const user = await response.json();
                     log(`✅ API Success! User: ${user.name} (${user.email})`);
@@ -129,27 +114,22 @@
                 updateStatus('❌ Cannot connect to server. Please check if the server is running.', 'error');
             }
         }
-
         function goToLogin() {
             window.location.href = './index.html';
         }
-
         function clearAll() {
             localStorage.clear();
             log('🗑️ Cleared all localStorage');
             location.reload();
         }
-
         // Auto-check on page load
         window.addEventListener('load', () => {
             log('🚀 Simple Dashboard Test loaded');
-            
             // Check if we're here from a redirect
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('test') === 'login') {
                 log('🔗 Arrived from login redirect test');
             }
-            
             checkAuth();
         });
     </script>

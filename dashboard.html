@@ -21,13 +21,11 @@
             --warning: #f59e0b;
             --error: #ef4444;
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, rgba(255, 107, 107, 0.05), rgba(78, 205, 196, 0.05));
@@ -35,7 +33,6 @@
             line-height: 1.6;
             min-height: 100vh;
         }
-
         /* Header */
         .header {
             background: rgba(255, 255, 255, 0.95);
@@ -47,7 +44,6 @@
             top: 0;
             z-index: 1000;
         }
-
         .header-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -56,7 +52,6 @@
             justify-content: space-between;
             align-items: center;
         }
-
         .logo {
             font-size: 1.8rem;
             font-weight: 900;
@@ -65,13 +60,11 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         .user-menu {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
-
         .user-avatar {
             width: 40px;
             height: 40px;
@@ -83,7 +76,6 @@
             color: white;
             font-weight: 600;
         }
-
         .logout-btn {
             background: none;
             border: 2px solid var(--primary);
@@ -93,12 +85,10 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
         .logout-btn:hover {
             background: var(--primary);
             color: white;
         }
-
         /* Main Content */
         .main-container {
             max-width: 1200px;
@@ -108,7 +98,6 @@
             grid-template-columns: 300px 1fr;
             gap: 2rem;
         }
-
         /* Sidebar */
         .sidebar {
             background: white;
@@ -119,7 +108,6 @@
             position: sticky;
             top: 100px;
         }
-
         .nav-item {
             display: flex;
             align-items: center;
@@ -131,18 +119,15 @@
             transition: all 0.3s ease;
             color: var(--text-light);
         }
-
         .nav-item:hover, .nav-item.active {
             background: var(--gradient);
             color: white;
             transform: translateX(5px);
         }
-
         .nav-item i {
             font-size: 1.2rem;
             width: 20px;
         }
-
         /* Content Area */
         .content {
             background: white;
@@ -151,28 +136,23 @@
             box-shadow: var(--shadow);
             min-height: 600px;
         }
-
         .content-header {
             margin-bottom: 2rem;
         }
-
         .content-title {
             font-size: 2rem;
             font-weight: 800;
             color: var(--text);
             margin-bottom: 0.5rem;
         }
-
         .content-subtitle {
             color: var(--text-light);
         }
-
         /* Profile Setup */
         .profile-setup {
             display: grid;
             gap: 2rem;
         }
-
         .profile-section {
             background: #f8f9fa;
             border-radius: 15px;
@@ -180,19 +160,16 @@
             border: 2px solid transparent;
             transition: all 0.3s ease;
         }
-
         .profile-section:hover {
             border-color: var(--primary);
             transform: translateY(-2px);
         }
-
         .section-header {
             display: flex;
             align-items: center;
             gap: 1rem;
             margin-bottom: 1.5rem;
         }
-
         .section-icon {
             width: 50px;
             height: 50px;
@@ -204,35 +181,29 @@
             color: white;
             font-size: 1.5rem;
         }
-
         .section-title {
             font-size: 1.3rem;
             font-weight: 600;
         }
-
         .section-description {
             color: var(--text-light);
             font-size: 0.9rem;
         }
-
         /* Form Styles */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
         }
-
         .form-group {
             margin-bottom: 1.5rem;
         }
-
         .form-label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
             color: var(--text);
         }
-
         .form-input, .form-textarea, .form-select {
             width: 100%;
             padding: 1rem;
@@ -242,18 +213,15 @@
             transition: all 0.3s ease;
             font-family: 'Poppins', sans-serif;
         }
-
         .form-input:focus, .form-textarea:focus, .form-select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
         }
-
         .form-textarea {
             resize: vertical;
             min-height: 120px;
         }
-
         /* Photo Upload */
         .photo-upload-container {
             display: grid;
@@ -261,7 +229,6 @@
             gap: 2rem;
             align-items: start;
         }
-
         .profile-photo-preview {
             width: 200px;
             height: 200px;
@@ -275,26 +242,21 @@
             border: 4px solid #e1e5e9;
             transition: all 0.3s ease;
         }
-
         .profile-photo-preview:hover {
             border-color: var(--primary);
         }
-
         .profile-photo-preview img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .photo-placeholder {
             color: var(--text-light);
             text-align: center;
         }
-
         .file-input {
             display: none;
         }
-
         .upload-btn {
             background: var(--gradient);
             color: white;
@@ -308,12 +270,10 @@
             align-items: center;
             gap: 0.5rem;
         }
-
         .upload-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
         }
-
         /* Additional Photos */
         .additional-photos {
             display: grid;
@@ -321,7 +281,6 @@
             gap: 1rem;
             margin-top: 1rem;
         }
-
         .photo-slot {
             width: 150px;
             height: 150px;
@@ -335,18 +294,15 @@
             position: relative;
             overflow: hidden;
         }
-
         .photo-slot:hover {
             border-color: var(--primary);
             background: rgba(255, 107, 107, 0.05);
         }
-
         .photo-slot img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .photo-slot .remove-photo {
             position: absolute;
             top: 5px;
@@ -363,7 +319,6 @@
             justify-content: center;
             font-size: 0.8rem;
         }
-
         /* Interests Tags */
         .interests-container {
             display: flex;
@@ -371,7 +326,6 @@
             gap: 0.5rem;
             margin-top: 1rem;
         }
-
         .interest-tag {
             background: var(--gradient);
             color: white;
@@ -382,18 +336,15 @@
             align-items: center;
             gap: 0.5rem;
         }
-
         .interest-tag .remove {
             cursor: pointer;
             font-weight: bold;
         }
-
         .add-interest {
             display: flex;
             gap: 0.5rem;
             margin-top: 1rem;
         }
-
         .interest-input {
             flex: 1;
             padding: 0.5rem 1rem;
@@ -401,7 +352,6 @@
             border-radius: 25px;
             font-size: 0.9rem;
         }
-
         .add-interest-btn {
             background: var(--secondary);
             color: white;
@@ -410,7 +360,6 @@
             border-radius: 25px;
             cursor: pointer;
         }
-
         /* Buttons */
         .btn {
             padding: 1rem 2rem;
@@ -424,38 +373,31 @@
             align-items: center;
             gap: 0.5rem;
         }
-
         .btn-primary {
             background: var(--gradient);
             color: white;
         }
-
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
         }
-
         .btn-secondary {
             background: #6c757d;
             color: white;
         }
-
         .btn-outline {
             background: transparent;
             border: 2px solid var(--primary);
             color: var(--primary);
         }
-
         .btn-outline:hover {
             background: var(--primary);
             color: white;
         }
-
         /* Progress Indicator */
         .progress-container {
             margin-bottom: 2rem;
         }
-
         .progress-bar {
             width: 100%;
             height: 8px;
@@ -463,21 +405,18 @@
             border-radius: 4px;
             overflow: hidden;
         }
-
         .progress-fill {
             height: 100%;
             background: var(--gradient);
             border-radius: 4px;
             transition: width 0.3s ease;
         }
-
         .progress-text {
             text-align: center;
             margin-top: 0.5rem;
             color: var(--text-light);
             font-size: 0.9rem;
         }
-
         /* Success/Error Messages */
         .message {
             padding: 1rem;
@@ -487,19 +426,16 @@
             align-items: center;
             gap: 0.5rem;
         }
-
         .message.success {
             background: rgba(16, 185, 129, 0.1);
             border: 1px solid var(--success);
             color: var(--success);
         }
-
         .message.error {
             background: rgba(239, 68, 68, 0.1);
             border: 1px solid var(--error);
             color: var(--error);
         }
-
         /* Responsive */
         @media (max-width: 768px) {
             .main-container {
@@ -507,7 +443,6 @@
                 gap: 1rem;
                 padding: 0 1rem;
             }
-
             .sidebar {
                 position: static;
                 display: grid;
@@ -515,76 +450,62 @@
                 gap: 0.5rem;
                 padding: 1rem;
             }
-
             .nav-item {
                 flex-direction: column;
                 text-align: center;
                 padding: 0.5rem;
                 font-size: 0.9rem;
             }
-
             .photo-upload-container {
                 grid-template-columns: 1fr;
                 text-align: center;
             }
-
             .form-grid {
                 grid-template-columns: 1fr;
             }
         }
-
         /* Hidden class */
         .hidden {
             display: none !important;
         }
-
         /* Additional utility classes for inline style fixes */
         .logo-highlight {
             color: var(--primary);
         }
-
         .camera-placeholder-icon {
             font-size: 2rem;
             margin-bottom: 0.5rem;
         }
-
         .upload-hint {
             margin-top: 1rem;
             color: var(--text-light);
             font-size: 0.9rem;
         }
-
         .upload-btn-spaced {
             margin-top: 1rem;
         }
-
         .age-range-container {
             display: flex;
             gap: 1rem;
             align-items: center;
         }
-
         .age-input {
             width: 80px;
         }
-
         .distance-container {
             display: flex;
             gap: 1rem;
             align-items: center;
         }
-
         .progress-initial {
             width: 20%;
         }
-
         /* Discovery Interface Styles */
         .discovery-interface {
             max-width: 400px;
             margin: 0 auto;
             text-align: center;
         }
-
         /* Profile Incomplete Banner */
         .profile-incomplete-banner {
             background: linear-gradient(135deg, rgba(255, 230, 109, 0.1), rgba(255, 107, 107, 0.1));
@@ -593,61 +514,51 @@
             padding: 1.5rem;
             margin-bottom: 2rem;
         }
-
         .banner-content {
             display: flex;
             align-items: center;
             gap: 1rem;
             text-align: left;
         }
-
         .banner-content i {
             color: var(--accent);
             font-size: 1.5rem;
             flex-shrink: 0;
         }
-
         .banner-text {
             flex: 1;
         }
-
         .banner-text h4 {
             margin-bottom: 0.5rem;
             color: var(--text);
             font-size: 1.1rem;
         }
-
         .banner-text p {
             color: var(--text-light);
             font-size: 0.9rem;
             margin: 0;
         }
-
         .banner-content .btn {
             flex-shrink: 0;
             padding: 0.6rem 1.2rem;
             font-size: 0.9rem;
         }
-
         .discover-card-container {
             position: relative;
             margin-bottom: 2rem;
         }
-
         .discover-info .tip {
             color: var(--accent);
             font-size: 0.85rem;
             margin-top: 0.5rem;
             font-style: italic;
         }
-
         .error-actions {
             display: flex;
             gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
         }
-
         /* Mobile responsiveness for banner */
         @media (max-width: 768px) {
             .banner-content {
@@ -655,26 +566,21 @@
                 text-align: center;
                 gap: 1rem;
             }
-
             .banner-text {
                 text-align: center;
             }
-
             .error-actions {
                 flex-direction: column;
                 align-items: center;
             }
-
             .error-actions .btn {
                 width: 200px;
             }
         }
-
         .discover-card-container {
             position: relative;
             margin-bottom: 2rem;
         }
-
         .discover-card {
             background: white;
             border-radius: 20px;
@@ -685,25 +591,21 @@
             height: 600px;
             position: relative;
         }
-
         .discovery-card-inner {
             height: 100%;
             position: relative;
         }
-
         .discovery-photo {
             width: 100%;
             height: 70%;
             position: relative;
             overflow: hidden;
         }
-
         .discovery-photo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .photo-placeholder {
             width: 100%;
             height: 100%;
@@ -714,12 +616,10 @@
             justify-content: center;
             color: white;
         }
-
         .photo-placeholder i {
             font-size: 4rem;
             margin-bottom: 1rem;
         }
-
         .discovery-info-overlay {
             position: absolute;
             bottom: 0;
@@ -730,13 +630,11 @@
             padding: 2rem;
             text-align: left;
         }
-
         .discovery-main-info h2 {
             font-size: 1.8rem;
             margin-bottom: 0.5rem;
             color: white;
         }
-
         .discovery-college {
             display: flex;
             align-items: center;
@@ -744,19 +642,16 @@
             margin-bottom: 1rem;
             opacity: 0.9;
         }
-
         .discovery-bio {
             font-style: italic;
             margin-bottom: 1rem;
             opacity: 0.9;
         }
-
         .discovery-interests {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
         }
-
         .discovery-interests .interest-tag {
             background: rgba(255, 255, 255, 0.2);
             padding: 0.3rem 0.8rem;
@@ -765,19 +660,16 @@
             -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
         }
-
         .interest-more {
             color: var(--accent);
             font-size: 0.8rem;
         }
-
         .discover-actions {
             display: flex;
             justify-content: center;
             gap: 2rem;
             margin-bottom: 1rem;
         }
-
         .action-btn {
             width: 60px;
             height: 60px;
@@ -791,64 +683,52 @@
             transition: all 0.3s ease;
             box-shadow: var(--shadow);
         }
-
         .dislike-btn {
             background: #ff4458;
             color: white;
         }
-
         .dislike-btn:hover {
             background: #e63946;
             transform: scale(1.1);
         }
-
         .like-btn {
             background: var(--primary);
             color: white;
         }
-
         .like-btn:hover {
             background: #ff5252;
             transform: scale(1.1);
         }
-
         .super-like-btn {
             background: var(--accent);
             color: var(--dark);
         }
-
         .super-like-btn:hover {
             background: #ffd93d;
             transform: scale(1.1);
         }
-
         .discover-info {
             color: var(--text-light);
             font-size: 0.9rem;
         }
-
         /* Loading and Error States */
         .loading {
             text-align: center;
             padding: 3rem;
             color: var(--text-light);
         }
-
         .empty-state, .error-state {
             text-align: center;
             padding: 3rem;
         }
-
         .empty-state h3, .error-state h3 {
             margin-bottom: 1rem;
             color: var(--text);
         }
-
         .empty-state p, .error-state p {
             color: var(--text-light);
             margin-bottom: 2rem;
         }
-
         /* Match Notification */
         .match-notification {
             position: fixed;
@@ -863,7 +743,6 @@
             z-index: 10000;
             animation: fadeIn 0.3s ease;
         }
-
         .match-content {
             background: white;
             border-radius: 20px;
@@ -872,24 +751,20 @@
             max-width: 400px;
             width: 90%;
         }
-
         .match-content h2 {
             color: var(--primary);
             margin-bottom: 1rem;
             font-size: 2rem;
         }
-
         .match-content p {
             margin-bottom: 2rem;
             color: var(--text);
         }
-
         .match-actions {
             display: flex;
             gap: 1rem;
             justify-content: center;
         }
-
         /* Like Notification */
         .like-notification {
             position: fixed;
@@ -902,17 +777,14 @@
             z-index: 10000;
             animation: slideIn 0.3s ease;
         }
-
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
         @keyframes slideIn {
             from { transform: translateX(100%); }
             to { transform: translateX(0); }
         }
-
         /* Profile Reminder Popup */
         .profile-reminder-popup {
             position: fixed;
@@ -927,7 +799,6 @@
             z-index: 10000;
             animation: fadeIn 0.3s ease;
         }
-
         .reminder-content {
             background: white;
             border-radius: 20px;
@@ -937,48 +808,40 @@
             width: 90%;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
-
         .reminder-content h3 {
             color: var(--primary);
             margin-bottom: 1rem;
             font-size: 1.5rem;
         }
-
         .reminder-content p {
             margin-bottom: 2rem;
             color: var(--text);
             line-height: 1.6;
         }
-
         .reminder-actions {
             display: flex;
             gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
         }
-
         .reminder-actions .btn {
             min-width: 140px;
         }
-
         @media (max-width: 576px) {
             .reminder-actions {
                 flex-direction: column;
                 align-items: center;
             }
-
             .reminder-actions .btn {
                 width: 100%;
             }
         }
-
         /* Matches Grid */
         .matches-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 1.5rem;
         }
-
         .match-card {
             background: white;
             border-radius: 15px;
@@ -987,11 +850,9 @@
             text-align: center;
             transition: transform 0.3s ease;
         }
-
         .match-card:hover {
             transform: translateY(-5px);
         }
-
         .match-photo {
             width: 80px;
             height: 80px;
@@ -1003,28 +864,23 @@
             align-items: center;
             justify-content: center;
         }
-
         .match-photo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .match-photo .photo-placeholder {
             color: white;
             font-size: 1.5rem;
         }
-
         .match-info h4 {
             margin-bottom: 0.5rem;
             color: var(--text);
         }
-
         .match-info p {
             color: var(--text-light);
             margin-bottom: 0.5rem;
         }
-
         .match-info small {
             color: var(--text-light);
             font-size: 0.8rem;
@@ -1045,7 +901,6 @@
             </div>
         </div>
     </header>
-
     <!-- Main Container -->
     <div class="main-container">
         <!-- Sidebar Navigation -->
@@ -1075,7 +930,6 @@
                 <span>Messages</span>
             </div>
         </div>
-
         <!-- Content Area -->
         <div class="content">
             <!-- Profile Setup Section -->
@@ -1084,7 +938,6 @@
                     <h1 class="content-title">Complete Your Profile</h1>
                     <p class="content-subtitle">Let's set up your profile to help you find the perfect match!</p>
                 </div>
-
                 <!-- Progress Indicator -->
                 <div class="progress-container">
                     <div class="progress-bar">
@@ -1092,7 +945,6 @@
                     </div>
                     <div class="progress-text">Profile completion: <span id="progressText">20%</span></div>
                 </div>
-
                 <div class="profile-setup">
                     <!-- Basic Information -->
                     <div class="profile-section">
@@ -1105,7 +957,6 @@
                                 <p class="section-description">Tell us about yourself</p>
                             </div>
                         </div>
-
                         <form id="basicInfoForm">
                             <div class="form-grid">
                                 <div class="form-group">
@@ -1143,7 +994,6 @@
                             </button>
                         </form>
                     </div>
-
                     <!-- Interests -->
                     <div class="profile-section">
                         <div class="section-header">
@@ -1155,11 +1005,9 @@
                                 <p class="section-description">What do you enjoy doing?</p>
                             </div>
                         </div>
-
                         <div class="interests-container" id="interestsContainer">
                             <!-- Interests will be added here dynamically -->
                         </div>
-
                         <div class="add-interest">
                             <input type="text" class="interest-input" id="interestInput" placeholder="Add an interest (e.g., Photography, Gaming, Hiking)">
                             <button type="button" class="add-interest-btn" onclick="addInterest()">
@@ -1169,14 +1017,12 @@
                     </div>
                 </div>
             </div>
-
             <!-- Photos Section -->
             <div id="photos-section" class="content-section hidden">
                 <div class="content-header">
                     <h1 class="content-title">Add Your Photos</h1>
                     <p class="content-subtitle">Show your personality with great photos!</p>
                 </div>
-
                 <div class="profile-section">
                     <div class="section-header">
                         <div class="section-icon">
@@ -1187,7 +1033,6 @@
                             <p class="section-description">This will be your main photo</p>
                         </div>
                     </div>
-
                     <div class="photo-upload-container">
                         <div class="profile-photo-preview" id="profilePhotoPreview">
                             <div class="photo-placeholder">
@@ -1206,7 +1051,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="profile-section">
                     <div class="section-header">
                         <div class="section-icon">
@@ -1217,7 +1061,6 @@
                             <p class="section-description">Add up to 5 more photos to showcase your personality</p>
                         </div>
                     </div>
-
                     <div class="additional-photos" id="additionalPhotos">
                         <!-- Photo slots will be generated here -->
                     </div>
@@ -1227,14 +1070,12 @@
                     </button>
                 </div>
             </div>
-
             <!-- Preferences Section -->
             <div id="preferences-section" class="content-section hidden">
                 <div class="content-header">
                     <h1 class="content-title">Dating Preferences</h1>
                     <p class="content-subtitle">Help us find your perfect match</p>
                 </div>
-
                 <div class="profile-section">
                     <form id="preferencesForm">
                         <div class="form-grid">
@@ -1272,7 +1113,6 @@
                     </form>
                 </div>
             </div>
-
             <!-- Other sections (Discover, Matches, Messages) will be added here -->
             <div id="discover-section" class="content-section hidden">
                 <div class="content-header">
@@ -1283,7 +1123,6 @@
                     <!-- Discover cards will be loaded here -->
                 </div>
             </div>
-
             <div id="matches-section" class="content-section hidden">
                 <div class="content-header">
                     <h1 class="content-title">Your Matches</h1>
@@ -1293,7 +1132,6 @@
                     <!-- Matches will be loaded here -->
                 </div>
             </div>
-
             <div id="messages-section" class="content-section hidden">
                 <div class="content-header">
                     <h1 class="content-title">Messages</h1>
@@ -1305,13 +1143,9 @@
             </div>
         </div>
     </div>
-
     <script src="campuscrush-dashboard.js"></script>
-<<<<<<< HEAD
-=======
     <script src="discovery-test.js"></script>
     <script src="debug-discovery.js"></script>
     <script src="simple-debug.js"></script>
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
 </body>
 </html>

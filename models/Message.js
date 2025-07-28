@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const MessageSchema = new mongoose.Schema({
     sender: {
         type: mongoose.Schema.Types.ObjectId,
@@ -42,9 +41,7 @@ const MessageSchema = new mongoose.Schema({
         default: false
     }
 }, { timestamps: true });
-
 // Index for efficient querying
 MessageSchema.index({ match: 1, sentAt: -1 });
 MessageSchema.index({ sender: 1, receiver: 1 });
-
 module.exports = mongoose.model('Message', MessageSchema);

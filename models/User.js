@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -18,15 +17,12 @@ const UserSchema = new mongoose.Schema({
         required: true,
         minlength: 6
     },
-<<<<<<< HEAD
     isVerified: {
         type: Boolean,
         default: false
     },
     verificationToken: String,
     verificationTokenExpires: Date,
-=======
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
     profile: {
         bio: {
             type: String,
@@ -90,5 +86,4 @@ const UserSchema = new mongoose.Schema({
         default: false
     }
 }, { timestamps: true });
-
 module.exports = mongoose.model('User', UserSchema);

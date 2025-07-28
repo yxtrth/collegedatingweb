@@ -4,14 +4,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
-<<<<<<< HEAD
 const { generateVerificationToken, sendVerificationEmail } = require('../services/emailService');
-=======
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
-
 // JWT Secret (in production, use environment variable)
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
-
 // Register User
 router.post('/register', [
     body('name').trim().isLength({ min: 2 }).withMessage('Name must be at least 2 characters'),
@@ -24,44 +19,30 @@ router.post('/register', [
         // Check for validation errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-<<<<<<< HEAD
             // Return first validation error message
             return res.status(400).json({ message: errors.array()[0].msg });
-=======
             return res.status(400).json({ errors: errors.array() });
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
         }
-
         const { name, email, password, college, age, major, year } = req.body;
-
         // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists with this email' });
         }
-
         // Hash password
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-<<<<<<< HEAD
         // Generate verification token
         const verificationToken = generateVerificationToken();
         const verificationTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
-
-=======
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
         // Create new user
         const newUser = new User({
             name,
             email,
             password: hashedPassword,
-<<<<<<< HEAD
             verificationToken,
             verificationTokenExpires,
             isVerified: false,
-=======
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
             profile: {
                 college,
                 age,
@@ -69,14 +50,10 @@ router.post('/register', [
                 year: year || 'Freshman'
             }
         });
-
         await newUser.save();
-
-<<<<<<< HEAD
         // Send verification email
         try {
             const emailResult = await sendVerificationEmail(newUser, verificationToken);
-            
             res.status(201).json({
                 message: 'User registered successfully. Please check your email to verify your account.',
                 user: {
@@ -109,14 +86,12 @@ router.post('/register', [
         }
         // Surface any other error messages
         res.status(500).json({ message: err.message || 'Server error' });
-=======
         // Generate JWT token
         const token = jwt.sign(
             { userId: newUser._id, email: newUser.email },
             JWT_SECRET,
             { expiresIn: '24h' }
         );
-
         res.status(201).json({
             message: 'User registered successfully',
             token,
@@ -130,10 +105,8 @@ router.post('/register', [
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Error registering user' });
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
     }
 });
-
 // Login User
 router.post('/login', [
     body('email').isEmail().withMessage('Please enter a valid email'),
@@ -145,22 +118,17 @@ router.post('/login', [
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-
         const { email, password } = req.body;
-
         // Find user by email
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-
         // Check password
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-
-<<<<<<< HEAD
         // Check if email is verified
         if (!user.isVerified) {
             return res.status(401).json({ 
@@ -168,20 +136,15 @@ router.post('/login', [
                 emailNotVerified: true 
             });
         }
-
-=======
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
         // Update last active
         user.lastActive = new Date();
         await user.save();
-
         // Generate JWT token
         const token = jwt.sign(
             { userId: user._id, email: user.email },
             JWT_SECRET,
             { expiresIn: '24h' }
         );
-
         res.status(200).json({
             message: 'Login successful',
             token,
@@ -198,29 +161,23 @@ router.post('/login', [
         res.status(500).json({ message: 'Error logging in' });
     }
 });
-
-<<<<<<< HEAD
 // Verify email
 router.get('/verify/:token', async (req, res) => {
     try {
         const { token } = req.params;
-
         // Find user with this verification token
         const user = await User.findOne({
             verificationToken: token,
             verificationTokenExpires: { $gt: Date.now() }
         });
-
         if (!user) {
             return res.status(400).json({ message: 'Invalid or expired verification token' });
         }
-
         // Update user as verified
         user.isVerified = true;
         user.verificationToken = undefined;
         user.verificationTokenExpires = undefined;
         await user.save();
-
         // Redirect to verification success page with success status
         res.redirect(`/verify-email.html?status=success`);
     } catch (err) {
@@ -229,7 +186,6 @@ router.get('/verify/:token', async (req, res) => {
         res.redirect(`/verify-email.html?status=error&message=${encodeURIComponent('Error verifying email')}`);
     }
 });
-
 // Resend verification email
 router.post('/resend-verification', [
     body('email').isEmail().withMessage('Please enter a valid email')
@@ -240,33 +196,26 @@ router.post('/resend-verification', [
         if (!errors.isEmpty()) {
             return res.status(400).json({ message: errors.array()[0].msg });
         }
-
         const { email } = req.body;
-
         // Find user by email
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-
         // Check if already verified
         if (user.isVerified) {
             return res.status(400).json({ message: 'Email is already verified' });
         }
-
         // Generate new verification token
         const verificationToken = generateVerificationToken();
         const verificationTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
-
         // Update user with new token
         user.verificationToken = verificationToken;
         user.verificationTokenExpires = verificationTokenExpires;
         await user.save();
-
         // Send verification email
         try {
             const emailResult = await sendVerificationEmail(user, verificationToken);
-            
             res.status(200).json({
                 message: 'Verification email sent successfully. Please check your inbox.',
                 previewUrl: emailResult.previewUrl // Only for development
@@ -280,18 +229,13 @@ router.post('/resend-verification', [
         res.status(500).json({ message: 'Error sending verification email' });
     }
 });
-
-=======
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
 // Middleware to verify JWT token
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
-
     if (!token) {
         return res.status(401).json({ message: 'Access token required' });
     }
-
     jwt.verify(token, JWT_SECRET, (err, user) => {
         if (err) {
             return res.status(403).json({ message: 'Invalid token' });
@@ -300,7 +244,6 @@ const authenticateToken = (req, res, next) => {
         next();
     });
 };
-
 // Get current user profile
 router.get('/me', authenticateToken, async (req, res) => {
     try {
@@ -314,6 +257,5 @@ router.get('/me', authenticateToken, async (req, res) => {
         res.status(500).json({ message: 'Error fetching user profile' });
     }
 });
-
 module.exports = router;
 module.exports.authenticateToken = authenticateToken;

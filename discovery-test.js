@@ -1,7 +1,5 @@
 // Simple test to bypass discovery issues
-
 console.log('🧪 Discovery Debug Script Loaded');
-
 // Add a test button to the page
 function addDiscoveryTestButton() {
     const testButton = document.createElement('button');
@@ -18,7 +16,6 @@ function addDiscoveryTestButton() {
         border-radius: 5px;
         cursor: pointer;
     `;
-    
     testButton.onclick = async function() {
         console.log('🚀 Forcing discovery load...');
         const container = document.getElementById('discoverContainer');
@@ -26,7 +23,6 @@ function addDiscoveryTestButton() {
             alert('discoverContainer not found!');
             return;
         }
-        
         // Show test users directly
         container.innerHTML = `
             <div class="profile-section">
@@ -58,13 +54,10 @@ function addDiscoveryTestButton() {
                 </div>
             </div>
         `;
-        
         console.log('✅ Test discovery content loaded');
     };
-    
     document.body.appendChild(testButton);
 }
-
 // Load the test button when page loads
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', addDiscoveryTestButton);

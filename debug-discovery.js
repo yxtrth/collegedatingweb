@@ -1,25 +1,20 @@
 // Comprehensive Discovery Debug Script
 console.log('🔍 DISCOVERY DEBUG SCRIPT LOADED');
-
 // Override the original loadDiscoverUsers function with extensive debugging
 if (window.app) {
     const originalLoadDiscoverUsers = window.app.loadDiscoverUsers;
-    
     window.app.loadDiscoverUsers = async function() {
         console.log('🚀 DEBUG: loadDiscoverUsers called');
         console.log('🔑 Token:', this.token ? 'EXISTS' : 'MISSING');
         console.log('🌐 Base URL:', this.baseURL);
         console.log('👤 Current User:', this.currentUser);
         console.log('📊 Profile Completion:', this.profileCompletion);
-        
         const container = document.getElementById('discoverContainer');
         console.log('📦 Container:', container ? 'FOUND' : 'NOT FOUND');
-        
         if (!container) {
             console.error('❌ discoverContainer element not found in DOM!');
             return;
         }
-
         try {
             // Show debug loading state
             container.innerHTML = `
@@ -28,30 +23,23 @@ if (window.app) {
                     <p>Check console for detailed logs</p>
                 </div>
             `;
-            
             console.log('📡 Making API call to /match/discover...');
-            
             // Test API call with detailed logging
             const url = `${this.baseURL}/match/discover`;
             const headers = {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${this.token}`
             };
-            
             console.log('📤 Request URL:', url);
             console.log('📤 Request Headers:', headers);
-            
             const response = await fetch(url, {
                 method: 'GET',
                 headers: headers
             });
-            
             console.log('📥 Response Status:', response.status);
             console.log('📥 Response OK:', response.ok);
-            
             const responseText = await response.text();
             console.log('📥 Raw Response:', responseText);
-            
             let data;
             try {
                 data = JSON.parse(responseText);
@@ -60,20 +48,16 @@ if (window.app) {
                 console.error('❌ JSON Parse Error:', parseError);
                 throw new Error('Invalid JSON response: ' + responseText);
             }
-            
             if (!response.ok) {
                 console.error('❌ API Error:', data.message);
                 throw new Error(data.message || 'API request failed');
             }
-            
             const users = data.users || data;
             console.log('👥 Users extracted:', users);
             console.log('👥 User count:', users ? users.length : 'N/A');
-            
             if (users && users.length > 0) {
                 console.log('👤 Sample user:', users[0]);
             }
-            
             if (!users || users.length === 0) {
                 console.log('⚠️ No users found - showing empty state');
                 container.innerHTML = `
@@ -94,15 +78,12 @@ if (window.app) {
                 `;
                 return;
             }
-            
             // Show success with user cards
             console.log('✅ SUCCESS: Creating discovery interface with users');
             this.createDiscoveryInterface(container, users);
-            
         } catch (error) {
             console.error('❌ DISCOVERY ERROR:', error);
             console.error('❌ Error Stack:', error.stack);
-            
             container.innerHTML = `
                 <div class="profile-section">
                     <div class="error-state" style="text-align: center; padding: 3rem; background: #fee; border: 1px solid #fcc; border-radius: 8px;">
@@ -121,52 +102,37 @@ if (window.app) {
             `;
         }
     };
-    
     console.log('✅ Discovery function overridden with debug version');
 } else {
     console.log('⚠️ window.app not found yet - will try again when ready');
 }
-
 // Debug helper functions
 window.debugDB = async function() {
     console.log('🔍 DEBUGGING DATABASE...');
     try {
         const response = await fetch('http://localhost:5000/api/auth/me', {
             headers: {
-<<<<<<< HEAD
                 'Authorization': `Bearer ${localStorage.getItem('collegedatingbyyt_token')}`
-=======
                 'Authorization': `Bearer ${localStorage.getItem('campuscrush_token')}`
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
             }
         });
         const data = await response.json();
         console.log('👤 Current user:', data);
-        
         // Test user count endpoint if it exists
         // You might need to create this endpoint for debugging
-        
     } catch (error) {
         console.error('❌ Database debug error:', error);
     }
 };
-
 window.debugAuth = function() {
     console.log('🔐 DEBUGGING AUTHENTICATION...');
-<<<<<<< HEAD
     console.log('Token from localStorage:', localStorage.getItem('collegedatingbyyt_token'));
-=======
     console.log('Token from localStorage:', localStorage.getItem('campuscrush_token'));
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
     console.log('App token:', window.app ? window.app.token : 'App not loaded');
     console.log('Current user:', window.app ? window.app.currentUser : 'App not loaded');
-    
     // Try to re-authenticate
-<<<<<<< HEAD
     if (localStorage.getItem('collegedatingbyyt_token')) {
-=======
     if (localStorage.getItem('campuscrush_token')) {
->>>>>>> be720c18b57db286f2aa3c87e5bea68f6d38e92b
         console.log('Token exists, trying to fetch user info...');
         if (window.app) {
             window.app.loadUserProfile();
@@ -177,7 +143,6 @@ window.debugAuth = function() {
         window.location.href = 'index.html';
     }
 };
-
 // Add debug buttons to the page
 function addDebugButtons() {
     const debugPanel = document.createElement('div');
@@ -192,12 +157,10 @@ function addDebugButtons() {
     `;
     document.body.appendChild(debugPanel);
 }
-
 // Initialize debug panel when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', addDebugButtons);
 } else {
     addDebugButtons();
 }
-
 console.log('🎯 Debug script setup complete. Look for the debug panel in top-right corner.');

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require('./models/User');
-
 // Connect to MongoDB with better error handling
 async function connectDB() {
     try {
@@ -15,7 +14,6 @@ async function connectDB() {
         process.exit(1);
     }
 }
-
 // Sample data for generating users
 const colleges = [
     'Harvard University', 'Stanford University', 'MIT', 'UC Berkeley', 'UCLA',
@@ -28,7 +26,6 @@ const colleges = [
     'Boston University', 'Northeastern University', 'Tulane University',
     'University of Southern California', 'Georgia Tech', 'UT Austin', 'University of Florida'
 ];
-
 const majors = [
     'Computer Science', 'Business Administration', 'Psychology', 'Biology',
     'Engineering', 'Economics', 'Political Science', 'English Literature',
@@ -38,9 +35,7 @@ const majors = [
     'Music', 'Theater', 'Film Studies', 'Environmental Science',
     'Architecture', 'Journalism', 'Graphic Design', 'Nursing'
 ];
-
 const years = ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate'];
-
 const interests = [
     'Photography', 'Hiking', 'Reading', 'Movies', 'Music', 'Dancing',
     'Cooking', 'Traveling', 'Sports', 'Gaming', 'Art', 'Yoga',
@@ -50,7 +45,6 @@ const interests = [
     'Dogs', 'Cats', 'Netflix', 'Podcasts', 'Board Games', 'Concerts',
     'Theater', 'Museums', 'Beach', 'Mountains', 'City Life', 'Adventure'
 ];
-
 const bios = [
     "Looking for someone to share coffee dates and deep conversations with ☕",
     "Adventure seeker who loves trying new restaurants and exploring the city 🌟",
@@ -83,7 +77,6 @@ const bios = [
     "Future teacher spreading knowledge and looking for love 📚",
     "Tech enthusiast building apps and building connections 💻"
 ];
-
 const firstNames = {
     male: [
         'Alex', 'James', 'Michael', 'David', 'Daniel', 'Matthew', 'Ryan', 'Andrew',
@@ -101,7 +94,6 @@ const firstNames = {
         'Gabriella', 'Camila', 'Aria', 'Maya', 'Sarah', 'Claire', 'Kaylee', 'Riley'
     ]
 };
-
 const lastNames = [
     'Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis',
     'Rodriguez', 'Martinez', 'Hernandez', 'Lopez', 'Gonzalez', 'Wilson', 'Anderson',
@@ -111,23 +103,19 @@ const lastNames = [
     'Green', 'Adams', 'Nelson', 'Baker', 'Hall', 'Rivera', 'Campbell', 'Mitchell',
     'Carter', 'Roberts', 'Gomez', 'Phillips', 'Evans', 'Turner', 'Diaz', 'Parker'
 ];
-
 function getRandomElement(array) {
     return array[Math.floor(Math.random() * array.length)];
 }
-
 function getRandomElements(array, count) {
     const shuffled = array.sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
 }
-
 function generateUser(index) {
     const gender = Math.random() > 0.5 ? 'male' : 'female';
     const firstName = getRandomElement(firstNames[gender]);
     const lastName = getRandomElement(lastNames);
     const college = getRandomElement(colleges);
     const collegeDomain = college.toLowerCase().replace(/[^a-z0-9]/g, '') + '.edu';
-    
     return {
         name: `${firstName} ${lastName}`,
         email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 999)}@${collegeDomain}`,
@@ -147,40 +135,30 @@ function generateUser(index) {
         ]
     };
 }
-
 async function createUsers() {
     try {
         await connectDB();
-        
         console.log('🚀 Starting to create 100+ users...');
-        
         // Check current user count
         const existingCount = await User.countDocuments();
         console.log(`📊 Current users in database: ${existingCount}`);
-        
         const users = [];
         const numberOfUsers = 100; // Creating exactly 100 users
-        
         console.log('👥 Generating user data...');
         for (let i = 0; i < numberOfUsers; i++) {
             const userData = generateUser(i + existingCount); // Use offset to avoid duplicate photo URLs
-            
             // Hash password
             const salt = await bcrypt.genSalt(10);
             userData.password = await bcrypt.hash(userData.password, salt);
-            
             users.push(userData);
-            
             if ((i + 1) % 25 === 0) {
                 console.log(`✨ Generated ${i + 1}/${numberOfUsers} users...`);
             }
         }
-        
         console.log('💾 Saving users to database...');
         // Insert users in batches to avoid memory issues
         const batchSize = 20;
         let createdCount = 0;
-        
         for (let i = 0; i < users.length; i += batchSize) {
             const batch = users.slice(i, i + batchSize);
             try {
@@ -192,29 +170,23 @@ async function createUsers() {
                 // Continue with next batch
             }
         }
-        
         console.log(`🎉 Successfully created ${createdCount} new users!`);
-        
         // Get final statistics
         const totalUsers = await User.countDocuments();
         console.log(`📊 Total users in database: ${totalUsers}`);
-        
         // Display some sample users
         const sampleUsers = await User.find({}).limit(5).select('name major college');
         console.log('\n🌟 Sample users in database:');
         sampleUsers.forEach((user, index) => {
             console.log(`   ${index + 1}. ${user.name} - ${user.major} at ${user.college}`);
         });
-        
         await mongoose.connection.close();
         console.log('\n✅ Database connection closed. Your discovery page is now ready with plenty of users!');
-        
     } catch (error) {
         console.error('❌ Error creating users:', error);
         await mongoose.connection.close();
         process.exit(1);
     }
 }
-
 // Run the script
 createUsers();

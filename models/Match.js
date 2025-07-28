@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const MatchSchema = new mongoose.Schema({
     user1: {
         type: mongoose.Schema.Types.ObjectId,
@@ -16,5 +15,4 @@ const MatchSchema = new mongoose.Schema({
         default: Date.now
     }
 });
-
 module.exports = mongoose.model('Match', MatchSchema);
