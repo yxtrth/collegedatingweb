@@ -774,6 +774,14 @@
         });
         // Modal functionality
         function showModal(type) {
+            console.log('showModal called with type:', type);
+            
+            // Remove any existing modal first
+            const existingModal = document.getElementById('authModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+            
             // Create modal HTML
             const modalHTML = `
                 <div class="modal-overlay" id="authModal">
@@ -1054,7 +1062,7 @@
                 const response = await fetch(url, config);
                 console.log('Response status:', response.status); // Debug log
                 console.log('Response headers:', response.headers); // Debug log
-                if (!response.ok) {
+                
                 // Check if response is ok
                 if (!response.ok) {
                     // Try to get error message from response
@@ -1073,11 +1081,6 @@
                 }
                 const data = await response.json();
                 console.log('Response data:', data); // Debug log
-                return data;
-            } catch (error) {
-                console.error('API Error:', error);
-                // Try to parse JSON response
-                const data = await response.json();
                 return data;
             } catch (error) {
                 console.error('API Error:', error);
@@ -1161,16 +1164,11 @@
                             password: formData.get('password')
                         })
                     });
-<<<<<<< HEAD
                     // Store token and redirect
                     localStorage.setItem('collegedatingbyyt_token', data.token);
                     // Close modal and redirect immediately
                     closeModal();
                     window.location.href = './dashboard.html';
-=======
->>>>>>> f76fb20 (4)
-                    localStorage.setItem('collegedatingbyyt_token', data.token);
-                    showSuccess('Login successful! Welcome back!');
                 } catch (error) {
                     // Handle email verification error
                     if (error.message.includes('verify your email')) {
@@ -1183,15 +1181,28 @@
         });
         // Attach event listeners to buttons
         document.addEventListener('DOMContentLoaded', () => {
-            // Sign Up buttons
-            const signUpButtons = document.querySelectorAll('.btn-primary');
-            signUpButtons.forEach(btn => {
-                btn.addEventListener('click', () => showModal('signup'));
+            console.log('DOM loaded, attaching button listeners...');
+            
+            // Sign Up buttons - be more specific to avoid conflicts
+            const signUpButtons = document.querySelectorAll('.auth-buttons .btn-primary');
+            console.log('Found', signUpButtons.length, 'signup buttons');
+            signUpButtons.forEach((btn, index) => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('Signup button clicked:', index);
+                    showModal('signup');
+                });
             });
-            // Log In buttons
-            const logInButtons = document.querySelectorAll('.btn-outline');
-            logInButtons.forEach(btn => {
-                btn.addEventListener('click', () => showModal('login'));
+            
+            // Log In buttons - be more specific to avoid conflicts  
+            const logInButtons = document.querySelectorAll('.auth-buttons .btn-outline');
+            console.log('Found', logInButtons.length, 'login buttons');
+            logInButtons.forEach((btn, index) => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('Login button clicked:', index);
+                    showModal('login');
+                });
             });
         });
         // Animation on scroll
