@@ -3,7 +3,7 @@ const crypto = require('crypto');
 // Email configuration
 const createTransporter = () => {
     // Use environment variables for email configuration
-    return nodemailer.createTransporter({
+    return nodemailer.createTransport({
         host: process.env.EMAIL_HOST || 'smtp.ethereal.email',
         port: parseInt(process.env.EMAIL_PORT) || 587,
         secure: false, // true for 465, false for other ports
@@ -115,7 +115,7 @@ module.exports = {
 class EmailService {
     constructor() {
         // Configure email transporter (using Gmail as example)
-        this.transporter = nodemailer.createTransporter({
+        this.transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
                 user: process.env.EMAIL_USER || 'your-app-email@gmail.com',
@@ -131,7 +131,7 @@ class EmailService {
         try {
             // Create test account for development
             const testAccount = await nodemailer.createTestAccount();
-            this.transporter = nodemailer.createTransporter({
+            this.transporter = nodemailer.createTransport({
                 host: 'smtp.ethereal.email',
                 port: 587,
                 secure: false,
