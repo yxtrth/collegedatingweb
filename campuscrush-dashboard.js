@@ -3,9 +3,8 @@ class CampusCrushDashboard {
     constructor() {
         this.baseURL = window.location.hostname === 'localhost' 
             ? 'http://localhost:5000/api' 
-            : window.location.origin + '/api';
             : `${window.location.origin}/api`;
-        this.token = localStorage.getItem('collegedatingbyyt_token');
+        this.token = localStorage.getItem('campuscrush_token');
         this.currentUser = null;
         this.interests = [];
         this.additionalPhotos = [];
@@ -64,7 +63,7 @@ class CampusCrushDashboard {
         }
     }
     logout() {
-        localStorage.removeItem('collegedatingbyyt_token');
+        localStorage.removeItem('campuscrush_token');
         window.location.href = 'index.html';
     }
     // UI Methods
@@ -554,6 +553,11 @@ class CampusCrushDashboard {
                             <button class="btn btn-outline" onclick="app.showSection('profile')">Complete Profile</button>
                         </div>
                     </div>
+                </div>
+            `;
+        }
+    }
+
     // Content Loading Methods (placeholders for future implementation)
     async loadDiscoverUsers() {
         const container = document.getElementById('discoverContainer');
@@ -771,6 +775,11 @@ class CampusCrushDashboard {
                         <p>Please try again later.</p>
                         <button class="btn btn-primary" onclick="app.loadMatches()">Try Again</button>
                     </div>
+                </div>
+            `;
+        }
+    }
+
     async loadMatches() {
         const container = document.getElementById('matchesContainer');
         if (container) {

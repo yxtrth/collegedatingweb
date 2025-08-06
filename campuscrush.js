@@ -1,7 +1,9 @@
 // CampusCrush Frontend JavaScript
 class CampusCrush {
     constructor() {
-        this.baseURL = 'http://localhost:5000/api';
+        this.baseURL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000/api' 
+            : `${window.location.origin}/api`;
         this.token = localStorage.getItem('campuscrush_token');
         this.currentUser = null;
         this.init();
