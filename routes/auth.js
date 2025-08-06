@@ -86,25 +86,6 @@ router.post('/register', [
         }
         // Surface any other error messages
         res.status(500).json({ message: err.message || 'Server error' });
-        // Generate JWT token
-        const token = jwt.sign(
-            { userId: newUser._id, email: newUser.email },
-            JWT_SECRET,
-            { expiresIn: '24h' }
-        );
-        res.status(201).json({
-            message: 'User registered successfully',
-            token,
-            user: {
-                id: newUser._id,
-                name: newUser.name,
-                email: newUser.email,
-                college: newUser.profile.college
-            }
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Error registering user' });
     }
 });
 // Login User
