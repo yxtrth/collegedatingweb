@@ -1161,11 +1161,14 @@
                             password: formData.get('password')
                         })
                     });
+<<<<<<< HEAD
                     // Store token and redirect
                     localStorage.setItem('collegedatingbyyt_token', data.token);
                     // Close modal and redirect immediately
                     closeModal();
                     window.location.href = './dashboard.html';
+=======
+>>>>>>> f76fb20 (4)
                     localStorage.setItem('collegedatingbyyt_token', data.token);
                     showSuccess('Login successful! Welcome back!');
                 } catch (error) {
