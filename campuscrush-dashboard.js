@@ -649,7 +649,7 @@ class CampusCrushDashboard {
             }
         } catch (error) {
             console.error('Error handling swipe:', error);
-            this.showMessage('Error processing your action. Please try again.', 'error');
+            this.showError('Error processing your action. Please try again.');
         }
     }
     showProfileIncompleteReminder() {
