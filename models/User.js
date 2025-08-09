@@ -47,7 +47,10 @@ const UserSchema = new mongoose.Schema({
             type: String,
             default: ''
         },
-        photos: [String],
+        photos: {
+            type: [String],
+            default: []
+        },
         location: {
             type: String
         },
@@ -65,14 +68,20 @@ const UserSchema = new mongoose.Schema({
         distance: { type: Number, default: 50 }, // in miles
         interests: [String]
     },
-    likes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }],
-    dislikes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }],
+    likes: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }],
+        default: []
+    },
+    dislikes: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }],
+        default: []
+    },
     isActive: {
         type: Boolean,
         default: true

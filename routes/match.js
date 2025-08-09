@@ -186,9 +186,12 @@ router.get('/discover', authenticateToken, async (req, res) => {
         console.log('🔍 Discovery request from user:', currentUserId);
         // Get current user's likes and dislikes
         const currentUser = await User.findById(currentUserId).select('likes dislikes preferences profile.college');
+        if (!currentUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
         console.log('👤 Current user found:', !!currentUser);
-        console.log('👍 User likes count:', currentUser.likes.length);
-        console.log('👎 User dislikes count:', currentUser.dislikes.length);
+        console.log('👍 User likes count:', (currentUser.likes || []).length);
+        console.log('👎 User dislikes count:', (currentUser.dislikes || []).length);
         // Build query to exclude already liked/disliked users and current user
         const excludeIds = [
             currentUserId,
@@ -243,8 +246,8 @@ router.get('/debug/stats', authenticateToken, async (req, res) => {
                 isActive: true,
                 _id: { $ne: currentUserId }
             }),
-            currentUserLikes: await User.findById(currentUserId).select('likes dislikes').then(u => u.likes.length),
-            currentUserDislikes: await User.findById(currentUserId).select('likes dislikes').then(u => u.dislikes.length)
+            currentUserLikes: await User.findById(currentUserId).select('likes dislikes').then(u => (u ? u.likes.length : 0)),
+            currentUserDislikes: await User.findById(currentUserId).select('likes dislikes').then(u => (u ? u.dislikes.length : 0))
         };
         res.json(stats);
     } catch (err) {

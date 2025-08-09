@@ -1,15 +1,26 @@
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 // Email configuration
-const createTransporter = () => {
-    // Use environment variables for email configuration
+const createTransporter = async () => {
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+        return nodemailer.createTransport({
+            host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+            port: parseInt(process.env.EMAIL_PORT) || 587,
+            secure: (process.env.EMAIL_PORT || '587') === '465',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            }
+        });
+    }
+    const testAccount = await nodemailer.createTestAccount();
     return nodemailer.createTransport({
-        host: process.env.EMAIL_HOST || 'smtp.ethereal.email',
-        port: parseInt(process.env.EMAIL_PORT) || 587,
-        secure: false, // true for 465, false for other ports
+        host: 'smtp.ethereal.email',
+        port: 587,
+        secure: false,
         auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
+            user: testAccount.user,
+            pass: testAccount.pass
         }
     });
 };
@@ -20,7 +31,7 @@ const generateVerificationToken = () => {
 // Send verification email
 const sendVerificationEmail = async (user, token) => {
     try {
-        const transporter = createTransporter();
+        const transporter = await createTransporter();
         // Create verification URL
         const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
         const verificationUrl = `${baseUrl}/api/auth/verify/${token}`;
@@ -83,7 +94,7 @@ const sendVerificationEmail = async (user, token) => {
 // Send password reset email (for future use)
 const sendPasswordResetEmail = async (user, token) => {
     try {
-        const transporter = createTransporter();
+        const transporter = await createTransporter();
         const resetUrl = `${process.env.BASE_URL || 'http://localhost:5000'}/reset-password?token=${token}`;
         const mailOptions = {
             from: '"CollegeDatingByYT" <noreply@collegedatingbyyt.com>',
@@ -274,4 +285,4 @@ class EmailService {
         }
     }
 }
-module.exports = new EmailService();
+module.exports.emailService = new EmailService();
