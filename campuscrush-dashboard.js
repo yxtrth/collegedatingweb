@@ -83,11 +83,11 @@ class CampusCrushDashboard {
         // Basic info form
         const basicForm = document.getElementById('basicInfoForm');
         if (basicForm && profile) {
-            if (profile.bio) basicForm.bio.value = profile.bio;
-            if (profile.major) basicForm.major.value = profile.major;
-            if (profile.year) basicForm.year.value = profile.year;
-            if (profile.lookingFor) basicForm.lookingFor.value = profile.lookingFor;
-        }
+                         if (basicForm.bio && profile.bio) basicForm.bio.value = profile.bio;
+             if (basicForm.major && profile.major) basicForm.major.value = profile.major;
+             if (basicForm.year && profile.year) basicForm.year.value = profile.year;
+             if (basicForm.lookingFor && profile.lookingFor) basicForm.lookingFor.value = profile.lookingFor;
+}
         // Interests
         if (profile.interests && profile.interests.length > 0) {
             this.interests = [...profile.interests];
@@ -160,7 +160,7 @@ class CampusCrushDashboard {
         // Update navigation
         const navItems = document.querySelectorAll('.nav-item');
         navItems.forEach(item => item.classList.remove('active'));
-        const activeNavItem = document.querySelector(`[onclick="showSection('${sectionName}')"]`);
+        const activeNavItem = document.querySelector(`[onclick="showSection('${sectionName}')"]`) || document.querySelector(`[onclick=\"showSection('${sectionName}')\"]`);
         if (activeNavItem) {
             activeNavItem.classList.add('active');
         }
@@ -475,7 +475,7 @@ class CampusCrushDashboard {
             // Fetch potential matches
             const response = await this.apiCall('/match/discover');
             console.log('✅ API response received:', response);
-            const users = response.users || response; // Handle both response formats
+            const users = Array.isArray(response) ? response : (response.users || []);
             console.log('👥 Users for discovery:', users.length);
             if (users.length === 0) {
                 container.innerHTML = `
@@ -558,17 +558,6 @@ class CampusCrushDashboard {
         }
     }
 
-    // Content Loading Methods (placeholders for future implementation)
-    async loadDiscoverUsers() {
-        const container = document.getElementById('discoverContainer');
-        if (container) {
-            container.innerHTML = `
-                <div class="profile-section">
-                    <p>Discover feature coming soon! Complete your profile to start finding matches.</p>
-                </div>
-            `;
-        }
-    }
     showDiscoveryCard() {
         if (!this.discoveryUsers || this.currentDiscoveryIndex >= this.discoveryUsers.length) {
             this.loadDiscoverUsers(); // Reload when no more users
@@ -583,14 +572,14 @@ class CampusCrushDashboard {
         cardContainer.innerHTML = `
             <div class="discovery-card-inner">
                 <div class="discovery-photo">
-                    ${user.profile?.profilePhoto 
-                        ? `<img src="/api/profile/photo/${user.profile.profilePhoto}" alt="${user.name}">`
+                                         ${user.profile?.profilePicture 
+                        ? `<img src="${user.profile.profilePicture}" alt="${user.name}">`
                         : `<div class="photo-placeholder">
                                <i class="fas fa-user"></i>
                                <p>No Photo</p>
                            </div>`
                     }
-                </div>
+</div>
                 <div class="discovery-info-overlay">
                     <div class="discovery-main-info">
                         <h2>${user.name}, ${age}</h2>
@@ -726,7 +715,7 @@ class CampusCrushDashboard {
         try {
             container.innerHTML = '<div class="loading">Loading your matches...</div>';
             const matches = await this.apiCall('/match/me/matches');
-            if (matches.length === 0) {
+            if (!Array.isArray(matches) || matches.length === 0) {
                 container.innerHTML = `
                     <div class="profile-section">
                         <div class="empty-state">
@@ -739,27 +728,29 @@ class CampusCrushDashboard {
                 `;
                 return;
             }
-            // Display matches
-            const matchesHTML = matches.map(match => `
+            const matchesHTML = matches.map(match => {
+                const other = match.user || match.otherUser || {};
+                const matchedAt = match.matchedAt || match.createdAt;
+                return `
                 <div class="match-card">
                     <div class="match-photo">
-                        ${match.user.profile?.profilePhoto 
-                            ? `<img src="/api/profile/photo/${match.user.profile.profilePhoto}" alt="${match.user.name}">`
+                        ${other.profile?.profilePicture 
+                            ? `<img src="${other.profile.profilePicture}" alt="${other.name}">`
                             : `<div class="photo-placeholder">
                                    <i class="fas fa-user"></i>
                                </div>`
                         }
                     </div>
                     <div class="match-info">
-                        <h4>${match.user.name}</h4>
-                        <p>${match.user.profile?.major || 'Student'}</p>
-                        <small>Matched ${new Date(match.createdAt).toLocaleDateString()}</small>
+                        <h4>${other.name || 'Unknown'}</h4>
+                        <p>${other.profile?.major || 'Student'}</p>
+                        <small>Matched ${matchedAt ? new Date(matchedAt).toLocaleDateString() : ''}</small>
                     </div>
-                    <button class="btn btn-primary" onclick="app.startConversation('${match.user._id}')">
+                    <button class="btn btn-primary" onclick="app.openConversation('${match.matchId || match.id || ''}')">
                         Message
                     </button>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
             container.innerHTML = `
                 <div class="matches-grid">
                     ${matchesHTML}
@@ -772,32 +763,100 @@ class CampusCrushDashboard {
                     <div class="error-state">
                         <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--error); margin-bottom: 1rem;"></i>
                         <h3>Unable to load matches</h3>
-                        <p>Please try again later.</p>
+                        <p>${error.message || 'Please try again later.'}</p>
                         <button class="btn btn-primary" onclick="app.loadMatches()">Try Again</button>
                     </div>
                 </div>
             `;
         }
     }
-
-    async loadMatches() {
-        const container = document.getElementById('matchesContainer');
-        if (container) {
+    async loadConversations() {
+        const container = document.getElementById('messagesContainer');
+        if (!container) return;
+        try {
+            container.innerHTML = '<div class="loading">Loading conversations...</div>';
+            const conversations = await this.apiCall('/message/conversations/all');
+            if (!Array.isArray(conversations) || conversations.length === 0) {
+                container.innerHTML = `
+                    <div class="profile-section">
+                        <p>No conversations yet. Start matching with people to begin chatting!</p>
+                    </div>
+                `;
+                return;
+            }
+            const convoHTML = conversations.map(c => `
+                <div class="conversation-item" onclick="app.openConversation('${c.matchId}')">
+                    <div class="conversation-photo">
+                        ${c.otherUser?.profilePicture ? `<img src="${c.otherUser.profilePicture}" alt="${c.otherUser?.name}">` : `<div class=\"photo-placeholder\"><i class=\"fas fa-user\"></i></div>`}
+                    </div>
+                    <div class="conversation-info">
+                        <h4>${c.otherUser?.name || 'Unknown'}</h4>
+                        ${c.latestMessage ? `<p>${c.latestMessage.content}</p>` : '<p>No messages yet</p>'}
+                        <small>${c.latestMessage ? new Date(c.latestMessage.sentAt).toLocaleString() : new Date(c.matchedAt).toLocaleString()}</small>
+                    </div>
+                    ${c.unreadCount > 0 ? `<span class="badge">${c.unreadCount}</span>` : ''}
+                </div>
+            `).join('');
+            container.innerHTML = `<div class="conversations-list">${convoHTML}</div>`;
+        } catch (error) {
+            console.error('Error loading conversations:', error);
             container.innerHTML = `
                 <div class="profile-section">
-                    <p>You don't have any matches yet. Complete your profile and start discovering people!</p>
+                    <div class="error-state">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--error); margin-bottom: 1rem;"></i>
+                        <h3>Unable to load conversations</h3>
+                        <p>${error.message || 'Please try again later.'}</p>
+                        <button class="btn btn-primary" onclick="app.loadConversations()">Try Again</button>
+                    </div>
                 </div>
             `;
         }
     }
-    async loadConversations() {
+    async openConversation(matchId) {
         const container = document.getElementById('messagesContainer');
-        if (container) {
-            container.innerHTML = `
-                <div class="profile-section">
-                    <p>No conversations yet. Start matching with people to begin chatting!</p>
+        if (!container) return;
+        try {
+            container.innerHTML = '<div class="loading">Loading messages...</div>';
+            const data = await this.apiCall(`/message/conversation/${matchId}`);
+            const messages = Array.isArray(data.messages) ? data.messages : [];
+            const html = `
+                <div class="conversation-view">
+                    <button class="btn btn-outline" onclick="app.loadConversations()">Back</button>
+                    <div class="messages-thread">
+                        ${messages.map(m => `
+                            <div class="message-bubble ${m.isFromMe ? 'me' : 'them'}">
+                                <div class="message-content">${m.content}</div>
+                                <div class="message-meta">${new Date(m.sentAt).toLocaleString()}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <form id="messageForm" class="message-input">
+                        <input name="content" type="text" placeholder="Type a message..." required />
+                        <button class="btn btn-primary" type="submit">Send</button>
+                    </form>
                 </div>
             `;
+            container.innerHTML = html;
+            const form = document.getElementById('messageForm');
+            if (form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const content = form.content.value.trim();
+                    if (!content) return;
+                    try {
+                        await this.apiCall('/message/send', {
+                            method: 'POST',
+                            body: JSON.stringify({ receiverId: '', content, messageType: 'text' })
+                        });
+                        this.openConversation(matchId);
+                    } catch (err) {
+                        this.showError(err.message || 'Failed to send message');
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Error opening conversation:', error);
+            this.showError(error.message || 'Failed to load conversation');
         }
     }
 }
