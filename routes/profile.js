@@ -2,13 +2,16 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
 const { authenticateToken } = require('./auth');
 // Configure multer for file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/profiles/');
+        const uploadDir = path.join('uploads', 'profiles');
+        fs.mkdirSync(uploadDir, { recursive: true });
+        cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -31,19 +34,7 @@ const upload = multer({
         }
     }
 });
-// Get User Profile (Public - for viewing other users)
-router.get('/:id', async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id).select('-password -email -likes -dislikes');
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        res.status(200).json(user);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Error fetching profile' });
-    }
-});
+// Public profile route moved to bottom to avoid shadowing more specific routes
 // Get My Profile (Private - authenticated user)
 router.get('/me/details', authenticateToken, async (req, res) => {
     try {
@@ -202,4 +193,18 @@ router.get('/me/discover', authenticateToken, async (req, res) => {
         res.status(500).json({ message: 'Error fetching potential matches' });
     }
 });
+// Get User Profile (Public - for viewing other users)
+router.get('/:id', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).select('-password -email -likes -dislikes');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(user);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Error fetching profile' });
+    }
+});
+
 module.exports = router;

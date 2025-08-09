@@ -18,16 +18,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Serve static files
 app.use(express.static(path.join(__dirname)));
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-.then(() => {
-    console.log('✅ Connected to MongoDB Atlas');
-})
-.catch((err) => {
-    console.error('❌ MongoDB connection error:', err);
-});
+if (process.env.MONGODB_URI) {
+    mongoose.connect(process.env.MONGODB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(() => {
+        console.log('✅ Connected to MongoDB Atlas');
+    })
+    .catch((err) => {
+        console.error('❌ MongoDB connection error:', err);
+    });
+} else {
+    console.warn('⚠️  MONGODB_URI not set; API endpoints requiring DB will fail. Set MONGODB_URI in your environment.');
+}
 // Routes Configuration
 const API_BASE = {
     auth: '/api/auth',

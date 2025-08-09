@@ -21,7 +21,6 @@ router.post('/register', [
         if (!errors.isEmpty()) {
             // Return first validation error message
             return res.status(400).json({ message: errors.array()[0].msg });
-            return res.status(400).json({ errors: errors.array() });
         }
         const { name, email, password, college, age, major, year } = req.body;
         // Check if user already exists
