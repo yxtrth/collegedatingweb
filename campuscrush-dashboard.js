@@ -785,7 +785,7 @@ class CampusCrushDashboard {
                 return;
             }
             const convoHTML = conversations.map(c => `
-                <div class="conversation-item" onclick="app.openConversation('${c.matchId}')">
+                <div class="conversation-item" onclick="app.openConversation('${c.matchId}', '${c.otherUser?.id || ''}')">
                     <div class="conversation-photo">
                         ${c.otherUser?.profilePicture ? `<img src="${c.otherUser.profilePicture}" alt="${c.otherUser?.name}">` : `<div class=\"photo-placeholder\"><i class=\"fas fa-user\"></i></div>`}
                     </div>
@@ -812,7 +812,7 @@ class CampusCrushDashboard {
             `;
         }
     }
-    async openConversation(matchId) {
+    async openConversation(matchId, otherUserId) {
         const container = document.getElementById('messagesContainer');
         if (!container) return;
         try {
@@ -846,9 +846,9 @@ class CampusCrushDashboard {
                     try {
                         await this.apiCall('/message/send', {
                             method: 'POST',
-                            body: JSON.stringify({ receiverId: '', content, messageType: 'text' })
+                            body: JSON.stringify({ receiverId: otherUserId || '', content, messageType: 'text' })
                         });
-                        this.openConversation(matchId);
+                        this.openConversation(matchId, otherUserId);
                     } catch (err) {
                         this.showError(err.message || 'Failed to send message');
                     }
